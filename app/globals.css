@@ -1,0 +1,157 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ─── Design Tokens ────────────────────────────────────────────────────────── */
+/* Single source of truth — exactly matching the inspirational design */
+
+:root {
+  /* Core palette */
+  --hawk-bg:           #0E2B1A;   /* The exact dark green X code you provided for background */
+  --hawk-bg-alt:       #113620;   /* slightly darker alternating background */
+  --hawk-card:         #154026;   /* cards are darker green */
+  --hawk-card-hover:   #194d2e;   /* card hover state */
+  --hawk-border:       #1e5935;   /* Visible borders restored */
+  --hawk-border-hover: #267344;   /* border hover restored */
+  --hawk-green:        #aaff45;   /* The light green X code you provided*/
+  --hawk-green-dim:    #8edb2e;   /* muted accent (hover states, etc.)  */
+  --hawk-text:         #e8f5e9;   /* primary text                       */
+  --hawk-muted:        #85a892;   /* secondary / muted text             */
+
+  /* Shadcn/Tailwind alias mapping */
+  --background:              var(--hawk-bg);
+  --foreground:              var(--hawk-text);
+  --card:                    var(--hawk-card);
+  --card-foreground:         var(--hawk-text);
+  --popover:                 var(--hawk-card);
+  --popover-foreground:      var(--hawk-text);
+  --primary:                 var(--hawk-green);
+  --primary-foreground:      #0b1a0f;
+  --secondary:               var(--hawk-card);
+  --secondary-foreground:    var(--hawk-text);
+  --muted:                   #1f472a;
+  --muted-foreground:        var(--hawk-muted);
+  --accent:                  var(--hawk-green);
+  --accent-foreground:       #0b1a0f;
+  --destructive:             #ff5252;
+  --border:                  var(--hawk-border);
+  --input:                   #1b3e25;
+  --ring:                    var(--hawk-green);
+  --radius:                  0px; /* The inspiration has sharp edges */
+}
+
+@theme inline {
+  --color-background:    var(--background);
+  --color-foreground:    var(--foreground);
+
+  /* font stacks */
+  --font-sans:    var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono:    var(--font-dm-mono), ui-monospace, "Courier New", monospace;
+  --font-serif:   var(--font-instrument-serif), Georgia, serif;
+
+  /* Palette */
+  --color-hawk-bg:           var(--hawk-bg);
+  --color-hawk-bg-alt:       var(--hawk-bg-alt);
+  --color-hawk-card:         var(--hawk-card);
+  --color-hawk-card-hover:   var(--hawk-card-hover);
+  --color-hawk-green:        var(--hawk-green);
+  --color-hawk-text:         var(--hawk-text);
+  --color-hawk-muted:        var(--hawk-muted);
+}
+
+/* ─── Base layer ─────────────────────────────────────────────────────────── */
+@layer base {
+  * {
+    border-color: var(--hawk-border);
+    box-sizing: border-box;
+  }
+
+  html {
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    background-color: var(--hawk-bg) !important;
+    color: var(--hawk-text);
+    font-family: var(--font-sans);
+    min-height: 100vh;
+  }
+
+/* Scrollbar */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track  { background: var(--hawk-bg); }
+  ::-webkit-scrollbar-thumb  { background: var(--hawk-card); }
+  ::-webkit-scrollbar-thumb:hover { background: var(--hawk-green); }
+
+  /* Placeholders */
+  ::placeholder {
+    color: #1e5935 !important;
+    opacity: 1 !important;
+  }
+}
+
+/* ─── Keyframe Animations ─────────────────────────────────────────────────── */
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ─── Utility classes ────────────────────────────────────────────────────── */
+
+/* Card */
+.card-hawk {
+  background-color: var(--hawk-card);
+  border: 1px solid var(--hawk-border);
+  border-radius: 0px; /* Sharp corners like inspiration */
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+.card-hawk:hover {
+  background-color: var(--hawk-card-hover);
+  border-color: var(--hawk-border-hover);
+}
+
+/* Primary CTA button — exact match */
+.btn-hawk {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--hawk-green);
+  color: #0b1a0f;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  border-radius: 0px; /* Sharp corners */
+  border: none;
+  padding: 0.75rem 1.5rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: opacity 0.15s ease;
+  user-select: none;
+  cursor: pointer;
+}
+.btn-hawk:hover {
+  opacity: 0.9;
+}
+
+/* Input */
+.input-hawk {
+  background-color: #113620; /* Dark background inside input */
+  border: 1px solid var(--hawk-border) !important;
+  color: var(--hawk-green); /* The text inside input is green */
+  font-family: var(--font-mono);
+  border-radius: 0px;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+  padding: 0.75rem;
+}
+.input-hawk:focus {
+  outline: none;
+  background-color: #1f452a;
+  border-color: var(--hawk-green) !important;
+}
