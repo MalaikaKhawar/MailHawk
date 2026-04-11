@@ -614,7 +614,7 @@ function SectionHeader({ title, index }: { title: string; index?: string }) {
 function Footer({ label }: { label: string }) {
   return (
     <View style={S.footer} fixed>
-      <Text style={S.footerLeft}>{label}</Text>
+      <Text style={S.footerLeft}>{label} · Developed with ❤️ by Malaika Yasmeen Khawar</Text>
       <Text style={S.footerRight} render={({ pageNumber, totalPages }) => `${pageNumber} / ${totalPages}`} />
     </View>
   );
