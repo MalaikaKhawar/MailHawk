@@ -14,13 +14,13 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 border-b border-hawk-border bg-hawk-bg backdrop-blur-[8px]">
-      <div className="max-w-[1280px] mx-auto px-6">
+    <header className="fixed top-0 left-0 right-0 z-50 border-b border-hawk-border bg-hawk-bg backdrop-blur-sm">
+      <div className="max-w-7xl mx-auto px-6">
         <div className="flex items-center justify-between h-14">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 no-underline">
             <div className="w-7 h-7 rounded-none bg-hawk-green flex items-center justify-center">
-              <Shield className="w-[14px] h-[14px] text-hawk-bg" />
+              <Shield className="w-3.5 h-3.5 text-hawk-bg" />
             </div>
             <span className="font-mono text-base font-bold text-hawk-text tracking-[0.02em]">
               Mail<span className="text-hawk-green">Hawk</span>

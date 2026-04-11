@@ -55,7 +55,7 @@ export default function HomePage() {
 
         {/* ── Features ─────────────────────────────────────────────── */}
         <section id="features" className="bg-hawk-bg-alt py-24 px-6">
-          <div className="max-w-[1100px] mx-auto">
+          <div className="max-w-275 mx-auto">
             {/* Section label */}
             <div className="text-center mb-14">
               <p className="font-mono text-[0.68rem] tracking-[0.14em] uppercase text-hawk-green mb-[0.85rem]">
@@ -64,14 +64,14 @@ export default function HomePage() {
               <h2 className="font-serif text-[clamp(2rem,5vw,3.2rem)] font-normal text-hawk-text leading-[1.15] m-0">
                 Email forensics, <em className="text-hawk-green">simplified</em>
               </h2>
-              <p className="font-sans text-[0.95rem] text-hawk-muted max-w-[480px] mx-auto mt-4 leading-[1.6]">
+              <p className="font-sans text-[0.95rem] text-hawk-muted max-w-120 mx-auto mt-4 leading-[1.6]">
                 Paste any email header and get a full forensic breakdown in seconds.
                 No account needed. No data stored.
               </p>
             </div>
 
             {/* Grid */}
-            <div className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-[1px] bg-hawk-border border border-hawk-border rounded-none overflow-hidden">
+            <div className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-px bg-hawk-border border border-hawk-border rounded-none overflow-hidden">
               {FEATURES.map((f) => (
                 <div
                   key={f.title}
@@ -92,7 +92,7 @@ export default function HomePage() {
 
         {/* ── How it works ─────────────────────────────────────────── */}
         <section id="how-it-works" className="bg-hawk-bg py-24 px-6">
-          <div className="max-w-[900px] mx-auto">
+          <div className="max-w-225 mx-auto">
             <div className="text-center mb-14">
               <p className="font-mono text-[0.68rem] tracking-[0.14em] uppercase text-hawk-green mb-[0.85rem]">
                 — Quick Start
@@ -102,7 +102,7 @@ export default function HomePage() {
               </h2>
             </div>
 
-            <div className="flex flex-col md:flex-row gap-[1px] bg-hawk-border border border-hawk-border rounded-none overflow-hidden">
+            <div className="flex flex-col md:flex-row gap-px bg-hawk-border border border-hawk-border rounded-none overflow-hidden">
               {STEPS.map((s) => (
                 <div
                   key={s.step}

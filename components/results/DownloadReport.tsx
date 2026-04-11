@@ -38,7 +38,7 @@ export default function DownloadReport({ data }: Props) {
     <div className="card-hawk p-6 h-full flex flex-col justify-between">
       <div>
         <div className="flex items-center gap-3 mb-4">
-          <div className="w-10 h-10 rounded-none bg-[rgba(170,255,69,0.1)] border border-[rgba(170,255,69,0.2)] flex-shrink-0 flex items-center justify-center">
+          <div className="w-10 h-10 rounded-none bg-[rgba(170,255,69,0.1)] border border-[rgba(170,255,69,0.2)] shrink-0 flex items-center justify-center">
             <FileText className="w-5 h-5 text-hawk-green" />
           </div>
           <div>

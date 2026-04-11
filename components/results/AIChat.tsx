@@ -148,7 +148,7 @@ export default function AIChat({ data }: Props) {
           {messages.length > 0 && (
             <div
               ref={scrollRef}
-              className="h-72 overflow-y-auto px-5 py-3 space-y-4 border-t border-[var(--hawk-border)]"
+              className="h-72 overflow-y-auto px-5 py-3 space-y-4 border-t border-(--hawk-border)"
             >
               {messages.map((msg, i) => (
                 <div
@@ -156,7 +156,7 @@ export default function AIChat({ data }: Props) {
                   className={`flex items-start gap-3 ${msg.role === "user" ? "flex-row-reverse" : ""}`}
                 >
                   <div
-                    className={`w-7 h-7 rounded-none flex-shrink-0 flex items-center justify-center ${
+                    className={`w-7 h-7 rounded-none shrink-0 flex items-center justify-center ${
                       msg.role === "user"
                         ? "bg-hawk-green/10 border border-hawk-green/20"
                         : "bg-hawk-green/10 border border-hawk-green/20"
@@ -171,7 +171,7 @@ export default function AIChat({ data }: Props) {
                     className={`max-w-[80%] px-3.5 py-2.5 rounded-none text-xs leading-relaxed ${
                       msg.role === "user"
                         ? "bg-hawk-green/5 border border-hawk-green/10 text-hawk-text font-mono"
-                        : "bg-[var(--hawk-card)] border border-hawk-border text-[#cccccc]"
+                        : "bg-hawk-card border border-hawk-border text-[#cccccc]"
                     }`}
                   >
                     {msg.content ? (
@@ -194,7 +194,7 @@ export default function AIChat({ data }: Props) {
           )}
 
           {/* Input area */}
-          <div className="p-4 border-t border-[var(--hawk-border)] flex items-end gap-2">
+          <div className="p-4 border-t border-(--hawk-border) flex items-end gap-2">
             <textarea
               ref={inputRef}
               value={input}

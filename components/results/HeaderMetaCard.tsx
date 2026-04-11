@@ -36,7 +36,7 @@ export default function HeaderMetaCard({ header }: Props) {
       <div className="space-y-3">
         {rows.map(({ icon: Icon, label, value, mono }) => (
           <div key={label} className="flex items-start gap-3">
-            <div className="w-6 h-6 rounded-none bg-[var(--hawk-card)] flex items-center justify-center flex-shrink-0 mt-0.5">
+            <div className="w-6 h-6 rounded-none bg-hawk-card flex items-center justify-center shrink-0 mt-0.5">
               <Icon className="w-3 h-3 text-hawk-muted" />
             </div>
             <div className="min-w-0 flex-1">
@@ -53,12 +53,12 @@ export default function HeaderMetaCard({ header }: Props) {
       </div>
 
       {/* Extra headers */}
-      <div className="mt-5 pt-4 border-t border-[var(--hawk-border)]">
+      <div className="mt-5 pt-4 border-t border-(--hawk-border)">
         <p className="text-[9px] font-mono text-hawk-muted/80 uppercase tracking-widest mb-3">Extended Headers</p>
         <div className="grid grid-cols-1 gap-2">
           {extras.map(({ label, value }) => (
             <div key={label} className="flex items-center gap-2">
-              <span className="text-[10px] font-mono text-hawk-muted/80 w-36 flex-shrink-0">{label}</span>
+              <span className="text-[10px] font-mono text-hawk-muted/80 w-36 shrink-0">{label}</span>
               <span className="text-[10px] font-mono text-hawk-muted truncate">{value}</span>
             </div>
           ))}

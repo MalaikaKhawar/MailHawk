@@ -9,7 +9,7 @@ export default function InputTabs() {
   const [header, setHeader] = useState("");
 
   return (
-    <div className="w-full max-w-[700px] mx-auto">
+    <div className="w-full max-w-175 mx-auto">
       {/* Tab switcher — matches inspiration's button row */}
       <div className="flex gap-2 justify-center mb-4">
         {(["upload", "paste"] as const).map((tab) => (

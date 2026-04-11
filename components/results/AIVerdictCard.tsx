@@ -57,7 +57,7 @@ export default function AIVerdictCard({ verdict }: Props) {
         {/* Red Flags */}
         {verdict.redFlags.length > 0 && (
           <div>
-            <h3 className="text-xs font-mono font-bold text-[#ff4444] tracking-widest uppercase mb-3 flex items-center gap-1.5">
+            <h3 className="text-xs font-mono font-bold text-hawk-danger tracking-widest uppercase mb-3 flex items-center gap-1.5">
               <AlertTriangle className="w-3 h-3" />
               Red Flags ({verdict.redFlags.length})
             </h3>
@@ -97,7 +97,7 @@ export default function AIVerdictCard({ verdict }: Props) {
             <div className="space-y-2">
               {verdict.trustIndicators.map((ti, i) => (
                 <div key={i} className="flex items-start gap-2 p-2.5 rounded-none bg-[#00ff8808] border border-[#00ff8820]">
-                  <span className="text-hawk-green mt-0.5 flex-shrink-0 text-sm">✓</span>
+                  <span className="text-hawk-green mt-0.5 shrink-0 text-sm">✓</span>
                   <p className="text-xs text-hawk-muted">{ti}</p>
                 </div>
               ))}
@@ -117,9 +117,9 @@ export default function AIVerdictCard({ verdict }: Props) {
             {verdict.recommendations.map((rec, i) => {
               const pc = PRI_CONFIG[rec.priority as keyof typeof PRI_CONFIG] || PRI_CONFIG.LOW;
               return (
-                <div key={i} className="flex items-start gap-3 p-3 rounded-none bg-hawk-bg border border-[var(--hawk-border)]">
+                <div key={i} className="flex items-start gap-3 p-3 rounded-none bg-hawk-bg border border-(--hawk-border)">
                   <span
-                    className="text-[9px] font-mono font-bold px-2 py-0.5 rounded flex-shrink-0 mt-0.5"
+                    className="text-[9px] font-mono font-bold px-2 py-0.5 rounded shrink-0 mt-0.5"
                     style={{ color: pc.color, background: `${pc.color}15` }}
                   >
                     {pc.label}
@@ -145,7 +145,7 @@ export default function AIVerdictCard({ verdict }: Props) {
       {showTech && (
         <div className="mt-4 space-y-3">
           {Object.entries(verdict.technicalBreakdown).map(([key, val]) => (
-            <div key={key} className="p-3 rounded-none bg-hawk-bg border border-[var(--hawk-border)]">
+            <div key={key} className="p-3 rounded-none bg-hawk-bg border border-(--hawk-border)">
               <p className="text-[9px] font-mono text-hawk-green uppercase tracking-widest mb-1.5">
                 {key.replace(/Analysis$/, "").replace(/([A-Z])/g, " $1").trim()}
               </p>

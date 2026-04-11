@@ -33,7 +33,7 @@ const FALLBACK_VERDICT: AIVerdict = {
 };
 
 export async function runAIAnalysis(
-  data: Omit<AnalysisResult, "aiVerdict" | "analyzedAt">
+  data: Omit<AnalysisResult, "aiVerdict" | "analyzedAt" | "trustScore">
 ): Promise<AIVerdict> {
 
   // Strip rawHeader from the payload to avoid token bloat (it can be huge)
@@ -92,6 +92,77 @@ ${JSON.stringify(trimmedData, null, 2)}`;
   } catch (err) {
     console.error("[runAIAnalysis] AI Analysis Error:", err instanceof Error ? err.message : err);
     return FALLBACK_VERDICT;
+  }
+}
+
+// ─── AI Link Analysis ─────────────────────────────────────────────────────────
+
+export interface AILinkVerdict {
+  score: number;   // 0–100 phishing probability
+  reason: string;  // one-sentence explanation
+  label: "SAFE" | "SUSPICIOUS" | "PHISHING";
+}
+
+export async function analyzeLinksWithAI(
+  urls: string[],
+  fromDomain: string
+): Promise<Record<string, AILinkVerdict>> {
+  if (urls.length === 0) return {};
+
+  const unique = [...new Set(urls)].slice(0, 20);
+
+  const prompt = `You are an email security expert. Analyze the following URLs found in an email sent from "${fromDomain}".
+For each URL, assess the phishing risk considering:
+- Is the domain related to "${fromDomain}" or a well-known legitimate service?
+- WhatsApp, Google, Apple, Microsoft, Facebook, Twitter, LinkedIn group/share links are SAFE even if unrelated to sender.
+- URL shorteners, IP-based URLs, lookalike domains, typosquatting are HIGH risk.
+- Legitimate CDNs, tracking pixels, unsubscribe links are typically SAFE.
+
+Respond ONLY with a valid JSON object (no markdown) with this exact structure:
+{
+  "<url1>": { "score": <0-100>, "reason": "<one sentence>", "label": "SAFE"|"SUSPICIOUS"|"PHISHING" }
+}
+
+URLs to analyze:
+${unique.map((u, i) => `${i + 1}. ${u}`).join("\n")}`;
+
+  try {
+    const completion = await client.chat.completions.create({
+      model: MODEL,
+      messages: [
+        { role: "system", content: "You are an email security expert. Always respond with valid JSON only." },
+        { role: "user", content: prompt },
+      ],
+      temperature: 0.1,
+      max_tokens: 1500,
+    });
+
+    const raw = completion.choices[0]?.message?.content || "";
+    const jsonMatch = raw.match(/```(?:json)?\s*([\s\S]*?)```/) || raw.match(/(\{[\s\S]*\})/);
+    const jsonStr = jsonMatch ? (jsonMatch[1] || jsonMatch[0]) : raw;
+    const parsed = JSON.parse(jsonStr.trim()) as Record<string, AILinkVerdict>;
+
+    const result: Record<string, AILinkVerdict> = {};
+    for (const url of unique) {
+      const entry = parsed[url];
+      if (entry && typeof entry.score === "number") {
+        result[url] = {
+          score: Math.max(0, Math.min(100, Math.round(entry.score))),
+          reason: String(entry.reason || "").slice(0, 200),
+          label: (["SAFE", "SUSPICIOUS", "PHISHING"].includes(entry.label)
+            ? entry.label
+            : "SUSPICIOUS") as AILinkVerdict["label"],
+        };
+      } else {
+        result[url] = { score: 30, reason: "Could not assess this URL.", label: "SUSPICIOUS" };
+      }
+    }
+    return result;
+  } catch (err) {
+    console.error("[analyzeLinksWithAI] Error:", err instanceof Error ? err.message : err);
+    return Object.fromEntries(
+      unique.map((u) => [u, { score: 30, reason: "AI link analysis unavailable.", label: "SUSPICIOUS" as const }])
+    );
   }
 }
 

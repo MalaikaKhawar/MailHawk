@@ -57,10 +57,10 @@ export default function RelayTimeline({ hops, ipResults }: Props) {
           return (
             <div key={hop.hopNumber} className="flex gap-4">
               {/* Connector column */}
-              <div className="flex flex-col items-center flex-shrink-0 w-10">
+              <div className="flex flex-col items-center shrink-0 w-10">
                 {/* Circle */}
                 <div
-                  className="w-8 h-8 rounded-full border-2 flex items-center justify-center flex-shrink-0 z-10 font-mono font-bold text-xs"
+                  className="w-8 h-8 rounded-full border-2 flex items-center justify-center shrink-0 z-10 font-mono font-bold text-xs"
                   style={{
                     borderColor: color,
                     background: `${color}12`,
@@ -84,7 +84,7 @@ export default function RelayTimeline({ hops, ipResults }: Props) {
                 className={`flex-1 mb-3 p-4 rounded-none border transition-colors ${
                   isAnomaly
                     ? "border-current/30 bg-hawk-card-hover"
-                    : "border-[var(--hawk-border)] bg-hawk-bg"
+                    : "border-(--hawk-border) bg-hawk-bg"
                 }`}
                 style={{ borderColor: isAnomaly ? `${color}30` : undefined }}
               >
@@ -94,7 +94,7 @@ export default function RelayTimeline({ hops, ipResults }: Props) {
                     <div className="flex items-center gap-1.5 mb-0.5">
                       <span className="text-[9px] font-mono text-hawk-muted/80 uppercase tracking-wider">From</span>
                       {hop.isPrivateIp && (
-                        <span className="text-[9px] font-mono text-hawk-muted bg-[var(--hawk-card)] px-1.5 py-0.5 rounded">private</span>
+                        <span className="text-[9px] font-mono text-hawk-muted bg-hawk-card px-1.5 py-0.5 rounded">private</span>
                       )}
                     </div>
                     <p className="text-xs font-mono text-hawk-text truncate">{hop.from || "—"}</p>
@@ -119,7 +119,7 @@ export default function RelayTimeline({ hops, ipResults }: Props) {
                     </span>
                   )}
                   {ip?.isp && (
-                    <span className="text-hawk-muted truncate max-w-[200px]">{ip.isp}</span>
+                    <span className="text-hawk-muted truncate max-w-50">{ip.isp}</span>
                   )}
                   <span className="text-hawk-muted/80">{hop.protocol}</span>
                   {hop.hopNumber > 1 && (

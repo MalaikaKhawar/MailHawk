@@ -144,6 +144,12 @@ export interface LinkResult {
   isSuspiciousTld: boolean;
   mismatchesFromDomain: boolean;
   isHomograph: boolean;
+  /** AI-assessed phishing probability 0–100 */
+  aiPhishingScore: number;
+  /** One-line AI reasoning for this URL */
+  aiReason: string;
+  /** AI label */
+  aiLabel: "SAFE" | "SUSPICIOUS" | "PHISHING";
 }
 
 // ─── AI Types ────────────────────────────────────────────────────────────────
@@ -171,6 +177,20 @@ export interface ChatMessage {
   content: string;
 }
 
+// ─── Trust Score ─────────────────────────────────────────────────────────────
+// Composite 0–100 trust percentage combining all signals
+
+export interface TrustScore {
+  /** 0 = completely untrustworthy, 100 = fully trusted */
+  score: number;
+  /** Human-readable label e.g. "82% Trusted" */
+  label: string;
+  /** Color tier */
+  tier: "trusted" | "uncertain" | "untrusted";
+  /** Per-factor breakdown */
+  factors: { name: string; score: number; weight: number }[];
+}
+
 // ─── Combined Result ─────────────────────────────────────────────────────────
 
 export interface AnalysisResult {
@@ -180,5 +200,6 @@ export interface AnalysisResult {
   ipResults: IPResult[];
   linkResults: LinkResult[];
   aiVerdict: AIVerdict;
+  trustScore: TrustScore;
   analyzedAt: string;
 }

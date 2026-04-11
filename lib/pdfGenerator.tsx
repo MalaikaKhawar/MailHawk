@@ -639,6 +639,7 @@ function MailHawkPDF({ data }: { data: AnalysisResult }) {
     ipResults,
     linkResults,
     aiVerdict: ai,
+    trustScore: ts,
   } = data;
 
   const verdict    = ai?.verdict || sd.verdict;
@@ -692,6 +693,14 @@ function MailHawkPDF({ data }: { data: AnalysisResult }) {
                 <Text style={[S.verdictScoreNum, { color: rColor }]}>{riskScore}</Text>
                 <Text style={S.verdictScoreLabel}>RISK / 100</Text>
               </View>
+              {ts && (
+                <View style={[S.verdictStripScore, { backgroundColor: C.bgAlt, borderLeftWidth: 1, borderLeftColor: C.border }]}>
+                  <Text style={[S.verdictScoreNum, { color: ts.tier === "trusted" ? C.green : ts.tier === "uncertain" ? C.warn : C.danger }]}>
+                    {ts.score}%
+                  </Text>
+                  <Text style={S.verdictScoreLabel}>TRUST SCORE</Text>
+                </View>
+              )}
             </View>
 
             {/* One-liner */}
@@ -705,13 +714,19 @@ function MailHawkPDF({ data }: { data: AnalysisResult }) {
           {/* Bottom meta grid */}
           <View style={{ borderTopWidth: 1, borderTopColor: C.border, paddingTop: 18, flexDirection: "row", gap: 32 }}>
             {[
-              ["GENERATED", genDate],
+              ["GENERATED",   genDate],
               ["FROM DOMAIN", ph.fromDomain || "—"],
-              ["SUBJECT", ph.subject ? ph.subject.slice(0, 40) + (ph.subject.length > 40 ? "…" : "") : "—"],
+              ["SUBJECT",     ph.subject ? ph.subject.slice(0, 40) + (ph.subject.length > 40 ? "…" : "") : "—"],
+              ["TRUST SCORE", ts ? ts.label : "—"],
             ].map(([k, v]) => (
               <View key={k} style={{ flex: 1 }}>
                 <Text style={{ fontFamily: "DM Mono", fontSize: 6.5, color: C.dimmer, letterSpacing: 1, marginBottom: 4 }}>{k}</Text>
-                <Text style={{ fontFamily: "DM Mono", fontSize: 8, color: C.muted, lineHeight: 1.4 }}>{v}</Text>
+                <Text style={{
+                  fontFamily: "DM Mono", fontSize: 8, lineHeight: 1.4,
+                  color: k === "TRUST SCORE" && ts
+                    ? ts.tier === "trusted" ? C.green : ts.tier === "uncertain" ? C.warn : C.danger
+                    : C.muted,
+                }}>{v}</Text>
               </View>
             ))}
           </View>

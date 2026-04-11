@@ -48,15 +48,15 @@ export default function LoadingTerminal() {
       {/* Terminal header */}
       <div className="flex items-center gap-2 pb-3 border-b border-hawk-border">
         <div className="flex gap-1.5">
-          <div className="w-3 h-3 rounded-full bg-[#ff4444]/50" />
-          <div className="w-3 h-3 rounded-full bg-[#ffaa00]/50" />
+          <div className="w-3 h-3 rounded-full bg-hawk-danger/50" />
+          <div className="w-3 h-3 rounded-full bg-hawk-warning/50" />
           <div className="w-3 h-3 rounded-full bg-hawk-green/50" />
         </div>
         <span className="text-xs font-mono text-[#444455] ml-2">mailhawk — forensic-engine</span>
       </div>
 
       {/* Steps */}
-      <div className="space-y-2 min-h-[200px]">
+      <div className="space-y-2 min-h-50">
         {STEPS.map((step, i) => {
           const state = stepStates[i];
           return (
@@ -68,11 +68,11 @@ export default function LoadingTerminal() {
               style={{ animation: state !== "pending" ? "terminal-line 0.3s ease forwards" : undefined }}
             >
               <span
-                className={`text-base w-5 flex-shrink-0 ${
+                className={`text-base w-5 shrink-0 ${
                   state === "done"
                     ? "text-hawk-green"
                     : state === "active"
-                    ? "text-[#ffaa00]"
+                    ? "text-hawk-warning"
                     : "text-[#444455]"
                 }`}
               >

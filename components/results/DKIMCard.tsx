@@ -65,7 +65,7 @@ export default function DKIMCard({ dkim, fromResult, domain, selector, algorithm
           ["Key Status", dkim.isRevoked ? "Revoked" : dkim.keyExists ? "Valid public key found" : "Not found"],
         ].map(([k, v]) => (
           <div key={k} className="flex items-center gap-2">
-            <span className="text-[10px] font-mono text-hawk-muted w-28 flex-shrink-0 uppercase tracking-wider">{k}</span>
+            <span className="text-[10px] font-mono text-hawk-muted w-28 shrink-0 uppercase tracking-wider">{k}</span>
             <span className="text-xs font-mono text-hawk-text">{v}</span>
           </div>
         ))}

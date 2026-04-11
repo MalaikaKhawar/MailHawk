@@ -53,7 +53,7 @@ export default function DMARCCard({ dmarc, fromResult }: Props) {
           <span className="text-[10px] font-mono text-hawk-muted uppercase tracking-wider">Trustability</span>
           <span className="text-xs font-mono" style={{ color: trust.color }}>{trust.label}</span>
         </div>
-        <div className="h-1.5 rounded-full bg-[var(--hawk-card)] overflow-hidden">
+        <div className="h-1.5 rounded-full bg-hawk-card overflow-hidden">
           <div
             className="h-full rounded-full transition-all duration-700"
             style={{ width: trust.width, background: `linear-gradient(90deg, #004d29, ${trust.color})`, boxShadow: `0 0 8px ${trust.color}60` }}
@@ -75,7 +75,7 @@ export default function DMARCCard({ dmarc, fromResult }: Props) {
           ["Coverage", `${dmarc.percentage}% of mail`],
           ["Reporting", dmarc.reportingConfigured ? "✓ Configured" : "✗ Not configured"],
         ].map(([k, v]) => (
-          <div key={k as string} className="bg-hawk-bg rounded-none p-2.5 border border-[var(--hawk-border)]">
+          <div key={k as string} className="bg-hawk-bg rounded-none p-2.5 border border-(--hawk-border)">
             <p className="text-[9px] font-mono text-hawk-muted uppercase tracking-widest mb-1">{k as string}</p>
             <p className="text-xs font-mono text-hawk-text">{v as React.ReactNode}</p>
           </div>
@@ -84,8 +84,8 @@ export default function DMARCCard({ dmarc, fromResult }: Props) {
 
       {/* Policy explanation */}
       {policy && (
-        <div className="flex items-start gap-2 p-2.5 rounded-none bg-hawk-bg border border-[var(--hawk-border)] mb-4">
-          <Info className="w-3.5 h-3.5 mt-0.5 flex-shrink-0" style={{ color: policy.color }} />
+        <div className="flex items-start gap-2 p-2.5 rounded-none bg-hawk-bg border border-(--hawk-border) mb-4">
+          <Info className="w-3.5 h-3.5 mt-0.5 shrink-0" style={{ color: policy.color }} />
           <p className="text-xs text-hawk-muted">{policy.desc}</p>
         </div>
       )}

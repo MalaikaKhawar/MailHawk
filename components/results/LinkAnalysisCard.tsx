@@ -59,7 +59,7 @@ export default function LinkAnalysisCard({ links }: Props) {
               style={{ borderColor: rc.border, background: rc.bg }}
             >
               <div className="flex items-start gap-2.5 mb-2">
-                <Icon className="w-4 h-4 mt-0.5 flex-shrink-0" style={{ color: rc.color }} />
+                <Icon className="w-4 h-4 mt-0.5 shrink-0" style={{ color: rc.color }} />
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-1.5 mb-1">
                     <span
@@ -68,7 +68,7 @@ export default function LinkAnalysisCard({ links }: Props) {
                     >
                       {link.riskLevel}
                     </span>
-                    {link.isShortener && <span className="text-[9px] font-mono text-hawk-muted bg-[var(--hawk-card)] px-1.5 py-0.5 rounded border border-hawk-border">shortener</span>}
+                    {link.isShortener && <span className="text-[9px] font-mono text-hawk-muted bg-hawk-card px-1.5 py-0.5 rounded border border-hawk-border">shortener</span>}
                     {link.isIpBased && <span className="text-[9px] font-mono text-[#ff4444] bg-[#ff444410] px-1.5 py-0.5 rounded border border-[#ff444430]">IP-based</span>}
                     {link.isHomograph && <span className="text-[9px] font-mono text-[#ff4444] bg-[#ff444410] px-1.5 py-0.5 rounded border border-[#ff444430]">homograph</span>}
                     {link.isSuspiciousTld && <span className="text-[9px] font-mono text-[#ffaa00] bg-[#ffaa0010] px-1.5 py-0.5 rounded border border-[#ffaa0030]">suspicious TLD</span>}
@@ -81,7 +81,7 @@ export default function LinkAnalysisCard({ links }: Props) {
                   href={link.url}
                   target="_blank"
                   rel="noopener noreferrer nofollow"
-                  className="flex-shrink-0 text-hawk-muted hover:text-hawk-muted transition-colors"
+                  className="shrink-0 text-hawk-muted hover:text-hawk-muted transition-colors"
                   title="Open URL (caution)"
                   onClick={(e) => {
                     if (link.riskLevel === "DANGEROUS") {

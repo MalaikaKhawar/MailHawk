@@ -128,8 +128,8 @@ export default function RiskGauge({ score }: Props) {
       {/* Scale labels */}
       <div className="flex justify-between w-full mt-1 px-2">
         <span className="text-[10px] font-mono text-hawk-green">0 SAFE</span>
-        <span className="text-[10px] font-mono text-[#ffaa00]">30–60</span>
-        <span className="text-[10px] font-mono text-[#ff4444]">SPOOFED 100</span>
+        <span className="text-[10px] font-mono text-hawk-warning">30–60</span>
+        <span className="text-[10px] font-mono text-hawk-danger">SPOOFED 100</span>
       </div>
     </div>
   );

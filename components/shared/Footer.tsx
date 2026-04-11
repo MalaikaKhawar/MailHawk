@@ -4,7 +4,7 @@ import { Shield } from "lucide-react";
 export default function Footer() {
   return (
     <footer className="border-t border-hawk-border bg-hawk-bg mt-20">
-      <div className="max-w-[1280px] mx-auto px-6 py-10">
+      <div className="max-w-7xl mx-auto px-6 py-10">
         <div className="flex flex-wrap gap-6 items-center justify-between">
 
           {/* Brand */}

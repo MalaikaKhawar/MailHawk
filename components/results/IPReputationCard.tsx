@@ -50,7 +50,7 @@ export default function IPReputationCard({ ipResults }: Props) {
               <div className="flex items-start justify-between gap-3 mb-3">
                 <div className="flex items-center gap-2.5">
                   <div
-                    className="w-8 h-8 rounded-none flex items-center justify-center flex-shrink-0"
+                    className="w-8 h-8 rounded-none flex items-center justify-center shrink-0"
                     style={{ background: rc.bg, border: `1px solid ${rc.border}` }}
                   >
                     <Server className="w-4 h-4" style={{ color: rc.color }} />
@@ -65,7 +65,7 @@ export default function IPReputationCard({ ipResults }: Props) {
 
                 {/* Risk badge */}
                 <span
-                  className="text-xs font-mono font-bold px-2.5 py-1 rounded-none border flex-shrink-0"
+                  className="text-xs font-mono font-bold px-2.5 py-1 rounded-none border shrink-0"
                   style={{ color: rc.color, background: "transparent", borderColor: rc.border }}
                 >
                   {ip.riskLevel}
@@ -89,16 +89,16 @@ export default function IPReputationCard({ ipResults }: Props) {
 
               {/* Flags */}
               <div className="flex flex-wrap gap-1.5 mt-2">
-                {ip.isTor && <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-[#ff444420] text-[#ff4444] border border-[#ff444430]">⚠ TOR</span>}
-                {ip.isProxy && <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-[#ffaa0020] text-[#ffaa00] border border-[#ffaa0030]">⚠ PROXY</span>}
+                {ip.isTor && <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-[#ff444420] text-hawk-danger border border-[#ff444430]">⚠ TOR</span>}
+                {ip.isProxy && <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-[#ffaa0020] text-hawk-warning border border-[#ffaa0030]">⚠ PROXY</span>}
                 {ip.isHosting && <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-[#4488ff20] text-[#4488ff] border border-[#4488ff30]">HOSTING</span>}
                 {ip.totalReports > 0 && (
-                  <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-[#ff444420] text-[#ff4444] border border-[#ff444430]">
+                  <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-[#ff444420] text-hawk-danger border border-[#ff444430]">
                     <AlertTriangle className="w-2.5 h-2.5 inline mr-0.5" />
                     {ip.totalReports} reports
                   </span>
                 )}
-                {ip.usageType && <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-[var(--hawk-card)] text-hawk-muted border border-hawk-border">{ip.usageType}</span>}
+                {ip.usageType && <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-hawk-card text-hawk-muted border border-hawk-border">{ip.usageType}</span>}
               </div>
             </div>
           );

@@ -74,7 +74,7 @@ export default function PhishingProbability({ probability }: Props) {
         {/* Progress bar */}
         <div className="relative mb-3">
           {/* Track */}
-          <div className="h-3 rounded-full overflow-hidden bg-[var(--hawk-card)]">
+          <div className="h-3 rounded-full overflow-hidden bg-hawk-card">
             {/* Gradient zones background */}
             <div
               className="absolute inset-0 h-3 rounded-full opacity-20"
