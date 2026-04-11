@@ -7,7 +7,11 @@ import { Shield, ExternalLink, Menu } from "lucide-react";
 const NAV_LINKS = [
   { href: "#features", label: "Features" },
   { href: "#how-it-works", label: "How It Works" },
-  { href: "https://github.com", label: "GitHub ↗", external: true },
+  {
+    href: "https://github.com/MalaikaKhawar/MailHawk.git",
+    label: "GitHub ↗",
+    external: true,
+  },
 ];
 
 export default function Navbar() {
