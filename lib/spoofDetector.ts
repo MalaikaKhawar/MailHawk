@@ -1,7 +1,8 @@
 import type { ParsedHeader, SpoofDetectionResult, SpoofCheck } from "@/types";
+import { getRootDomain } from "./utils";
 
 // ─── Known phishing brands (display name spoof detection) ─────────────────────
-const KNOWN_BRANDS: Record<string, string[]> = {
+export const KNOWN_BRANDS: Record<string, string[]> = {
   paypal: ["paypal.com"],
   apple: ["apple.com", "icloud.com"],
   google: ["google.com", "gmail.com", "googlemail.com"],
@@ -22,6 +23,9 @@ const KNOWN_BRANDS: Record<string, string[]> = {
   linkedin: ["linkedin.com"],
   dropbox: ["dropbox.com"],
   stripe: ["stripe.com"],
+  github: ["github.com"],
+  anthropic: ["anthropic.com"],
+  openai: ["openai.com", "chatgpt.com"],
 };
 
 // ─── Lookalike domain patterns ─────────────────────────────────────────────
@@ -46,10 +50,21 @@ function extractDomain(email: string): string {
 
 function domainsMatch(a: string, b: string): boolean {
   if (!a || !b) return false;
-  return a.toLowerCase() === b.toLowerCase();
+  const lowerA = a.toLowerCase();
+  const lowerB = b.toLowerCase();
+  if (lowerA === lowerB) return true;
+  
+  return getRootDomain(lowerA) === getRootDomain(lowerB);
 }
 
 function isLookalikeDomain(domain: string): boolean {
+  // First, if it's an exact match for any genuine brand domain, it's NOT a lookalike.
+  const rootDomain = getRootDomain(domain);
+  const allGenuineDomains = Object.values(KNOWN_BRANDS).flat();
+  if (allGenuineDomains.includes(rootDomain)) {
+    return false; // It's genuine!
+  }
+  
   return LOOKALIKE_PATTERNS.some((p) => p.test(domain));
 }
 

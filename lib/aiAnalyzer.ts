@@ -8,7 +8,8 @@ const client = new OpenAI({
 
 const MODEL = process.env.OPENAI_MODEL || "gpt-4o";
 
-const SYSTEM_PROMPT = `You are MailHawk, an expert email forensics analyst and cybersecurity investigator with 20 years of experience. You analyze email header data and provide clear, accurate, actionable forensic verdicts. You explain complex technical findings in plain English that non-technical users can understand. Always respond with valid JSON only. No markdown. No explanation outside the JSON structure.`;
+const SYSTEM_PROMPT = `You are MailHawk, an expert email forensics analyst and cybersecurity investigator with 20 years of experience. You analyze email header data and provide clear, accurate, actionable forensic verdicts. You explain complex technical findings in plain English that non-technical users can understand. Always respond with valid JSON only. No markdown. No explanation outside the JSON structure.
+IMPORTANT RULE: Do NOT treat domains as mismatched if they share the same root/organizational domain (e.g., mail.google.com and bounces.google.com). Subdomains of the same root domain are considered an exact match and do not indicate spoofing or phishing.`;
 
 const FALLBACK_VERDICT: AIVerdict = {
   verdict: "SUSPICIOUS",

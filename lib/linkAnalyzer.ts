@@ -1,5 +1,7 @@
 import type { LinkResult, TrustScore, DnsResults, IPResult, SpoofDetectionResult, AIVerdict } from "@/types";
 import type { AILinkVerdict } from "@/lib/aiAnalyzer";
+import { getRootDomain } from "./utils";
+import { KNOWN_BRANDS } from "./spoofDetector";
 
 const URL_SHORTENERS = new Set([
   "bit.ly", "tinyurl.com", "t.co", "goo.gl", "ow.ly", "buff.ly",
@@ -45,6 +47,28 @@ function isHomographAttack(domain: string): boolean {
   return /[^\x00-\x7F]/.test(domain);
 }
 
+function hasEmbeddedUrl(url: string): boolean {
+  try {
+    const parsed = new URL(url);
+    for (const [key, val] of parsed.searchParams.entries()) {
+      if (val.startsWith("http://") || val.startsWith("https://")) {
+        return true;
+      }
+    }
+  } catch {
+    // If URL parsing fails, stick to a regex fallback
+  }
+  // Regex fallback: look for http:// or https:// inside the query string
+  const queryIndex = url.indexOf("?");
+  if (queryIndex !== -1) {
+    const query = url.slice(queryIndex);
+    if (query.includes("=http://") || query.includes("=https://") || query.includes("%3Dhttp")) {
+      return true;
+    }
+  }
+  return false;
+}
+
 function analyzeLink(
   url: string,
   fromDomain: string,
@@ -71,28 +95,50 @@ function analyzeLink(
   const isIpBased = isIpBasedUrl(url);
   const tld = "." + domain.split(".").slice(-1)[0];
   const isSuspiciousTld = SUSPICIOUS_TLDS.has(tld);
-  const mismatchesFromDomain = fromDomain
-    ? !domain.endsWith(fromDomain) && !fromDomain.endsWith(domain)
-    : false;
+  const rootDomain = getRootDomain(domain);
+  const fromRoot = getRootDomain(fromDomain);
+  const allGenuineDomains = Object.values(KNOWN_BRANDS).flat();
+  const isGenuineBrand = allGenuineDomains.includes(rootDomain);
   const excessiveSubs = hasExcessiveSubdomains(domain);
   const isHomograph = isHomographAttack(domain);
-  const isLookalike = KNOWN_BRANDS_PATTERNS.some((p) => p.test(domain));
+
+  let isLookalike = false;
+  if (!isGenuineBrand) {
+    isLookalike = KNOWN_BRANDS_PATTERNS.some((p) => p.test(domain));
+  }
+
+  const isEmbeddedRedirect = hasEmbeddedUrl(url);
+
+  // Mismatch logic: We don't want to penalize genuine brands (like Google, GitHub) 
+  // just because people link to them unless there's an embedded redirect being used.
+  let mismatchesFromDomain = false;
+  if (fromRoot && rootDomain && fromRoot !== rootDomain) {
+    if (!isGenuineBrand || isEmbeddedRedirect) {
+      mismatchesFromDomain = true;
+    }
+  }
 
   if (isShortener)          { flags.push("URL shortener — destination hidden");    riskPoints += 20; }
   if (isIpBased)            { flags.push("IP-based URL — no domain name");         riskPoints += 35; }
   if (isSuspiciousTld)      { flags.push(`Suspicious TLD: ${tld}`);                riskPoints += 20; }
-  if (mismatchesFromDomain) { flags.push("Domain mismatch with sender");           riskPoints += 25; }
+  if (mismatchesFromDomain) { flags.push("Domain mismatch with sender");           riskPoints += 15; }
   if (excessiveSubs)        { flags.push("Excessive subdomains");                  riskPoints += 10; }
   if (isHomograph)          { flags.push("Homograph/unicode attack detected");     riskPoints += 40; }
   if (isLookalike)          { flags.push("Lookalike brand domain detected");       riskPoints += 30; }
+  if (isEmbeddedRedirect)   { flags.push("Embedded URL detected (Open Redirect risk) — use caution"); riskPoints += 20; }
 
-  // Blend AI score (40%) with heuristic (60%)
+  // Blend AI score (30%) with heuristic (70%) to prioritize programmatic rules on edge cases
   const aiScore = aiResult?.score ?? 30;
-  const blended = riskPoints * 0.6 + aiScore * 0.4;
+  const blended = riskPoints * 0.7 + aiScore * 0.3;
 
   let riskLevel: LinkResult["riskLevel"] = "SAFE";
   if (blended >= 35) riskLevel = "DANGEROUS";
   else if (blended >= 15) riskLevel = "SUSPICIOUS";
+
+  // If we decided it's safe but it has an embedded redirect, we prompt caution: 
+  if (riskLevel === "SAFE" && isEmbeddedRedirect) {
+    riskLevel = "SUSPICIOUS"; // Ensure they take note of the embedded URL
+  }
 
   // AI says PHISHING → at least SUSPICIOUS
   if (aiResult?.label === "PHISHING" && riskLevel === "SAFE") riskLevel = "SUSPICIOUS";

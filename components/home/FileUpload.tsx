@@ -17,7 +17,7 @@ export default function FileUpload({ onHeaderExtracted }: Props) {
     (file: File) => {
       if (!file.name.endsWith(".eml") && !file.name.endsWith(".txt") && !file.name.endsWith(".msg")) {
         setStatus("error");
-        setErrorMsg("Only .eml, .msg, and .txt files are supported.");
+        setErrorMsg("Please upload a supported email format. Only .eml, .msg, and .txt files are supported.");
         return;
       }
 
@@ -41,15 +41,30 @@ export default function FileUpload({ onHeaderExtracted }: Props) {
   );
 
   const onDrop = useCallback(
-    (accepted: File[]) => {
-      if (accepted.length > 0) processFile(accepted[0]);
+    (accepted: File[], rejected: any[]) => {
+      if (accepted.length > 0) {
+        processFile(accepted[0]);
+      } else if (rejected.length > 0) {
+        const rejection = rejected[0];
+        if (rejection.errors?.some((e: any) => e.code === "file-too-large")) {
+          setStatus("error");
+          setErrorMsg("File is too large. Please upload an email under 5 MB.");
+          return;
+        }
+        
+        // Even if dropzone rejects it for other reasons (like mime type), 
+        // our manual check in processFile will handle it properly.
+        const file = rejection.file;
+        if (file) processFile(file);
+      }
     },
     [processFile]
   );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
-    accept: { "message/rfc822": [".eml"], "text/plain": [".txt"], "application/octet-stream": [".msg"] },
+    // Note: Leaving 'accept' undefined heavily optimizes for Windows drag-and-drop 
+    // where Mail files often don't have predefined MIME types, allowing our manual check to run.
     maxFiles: 1,
     maxSize: 5 * 1024 * 1024, // 5 MB
   });
