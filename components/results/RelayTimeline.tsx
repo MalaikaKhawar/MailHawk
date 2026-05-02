@@ -114,7 +114,7 @@ export default function RelayTimeline({ hops, ipResults }: Props) {
                   )}
                   {ip?.city && (
                     <span className="text-hawk-muted">
-                      {flag} {ip.city}, {ip.countryCode}
+                      {ip.city}, {ip.countryCode}
                     </span>
                   )}
                   {ip?.isp && (
