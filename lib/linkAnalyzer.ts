@@ -117,14 +117,14 @@ function analyzeLink(
     }
   }
 
-  if (isShortener)          { flags.push("URL shortener — destination hidden");    riskPoints += 20; }
-  if (isIpBased)            { flags.push("IP-based URL — no domain name");         riskPoints += 35; }
+  if (isShortener)          { flags.push("URL shortener - destination hidden");    riskPoints += 20; }
+  if (isIpBased)            { flags.push("IP-based URL - no domain name");         riskPoints += 35; }
   if (isSuspiciousTld)      { flags.push(`Suspicious TLD: ${tld}`);                riskPoints += 20; }
   if (mismatchesFromDomain) { flags.push("Domain mismatch with sender");           riskPoints += 15; }
   if (excessiveSubs)        { flags.push("Excessive subdomains");                  riskPoints += 10; }
   if (isHomograph)          { flags.push("Homograph/unicode attack detected");     riskPoints += 40; }
   if (isLookalike)          { flags.push("Lookalike brand domain detected");       riskPoints += 30; }
-  if (isEmbeddedRedirect)   { flags.push("Embedded URL detected (Open Redirect risk) — use caution"); riskPoints += 20; }
+  if (isEmbeddedRedirect)   { flags.push("Embedded URL detected (Open Redirect risk) - use caution"); riskPoints += 20; }
 
   const aiScore = aiResult?.score ?? 30;
   const blended = riskPoints * 0.7 + aiScore * 0.3;
@@ -148,7 +148,7 @@ function analyzeLink(
   };
 }
 
-/** Pure heuristic pass — fast, no AI */
+/** Pure heuristic pass - fast, no AI */
 export function analyzeLinks(rawHeader: string, fromDomain: string): LinkResult[] {
   const matches = rawHeader.match(URL_REGEX) || [];
   const unique = [...new Set(matches)];

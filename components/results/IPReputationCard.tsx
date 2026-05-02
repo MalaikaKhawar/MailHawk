@@ -84,7 +84,7 @@ export default function IPReputationCard({ ipResults }: Props) {
                     Abuse: {ip.abuseScore}/100
                   </span>
                 </div>
-                <div className="text-hawk-muted truncate col-span-2">{ip.isp || ip.org || "—"}</div>
+                <div className="text-hawk-muted truncate col-span-2">{ip.isp || ip.org || "-"}</div>
               </div>
 
               

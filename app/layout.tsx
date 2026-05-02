@@ -24,7 +24,7 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "MailHawk — Email Header Forensics & AI Spoof Detection",
+  title: "MailHawk - Email Header Forensics & AI Spoof Detection",
   description:
     "Analyze email headers instantly. Detect phishing, spoofing, and email fraud with AI-powered forensics. No login required.",
   keywords: [
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
     "AI email security",
   ],
   openGraph: {
-    title: "MailHawk — Email Forensics & Spoof Detection",
+    title: "MailHawk - Email Forensics & Spoof Detection",
     description:
       "AI-powered email header analysis. Detect spoofing, phishing and fraud in seconds.",
     type: "website",

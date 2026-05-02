@@ -12,7 +12,7 @@ interface Props {
 const POLICY_CONFIG = {
   reject:     { color: "var(--color-hawk-green)", label: "reject", desc: "Unauthorized emails are rejected outright" },
   quarantine: { color: "#ffaa00", label: "quarantine", desc: "Suspicious emails go to spam folder" },
-  none:       { color: "#ff8800", label: "none", desc: "Monitor only — no enforcement" },
+  none:       { color: "#ff8800", label: "none", desc: "Monitor only - no enforcement" },
 };
 
 const TRUST_CONFIG = {

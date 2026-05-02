@@ -59,9 +59,9 @@ export default function DKIMCard({ dkim, fromResult, domain, selector, algorithm
       
       <div className="space-y-2 mb-4">
         {[
-          ["Signing Domain", domain || "—"],
-          ["Selector", selector || "—"],
-          ["Algorithm", algorithm || "—"],
+          ["Signing Domain", domain || "-"],
+          ["Selector", selector || "-"],
+          ["Algorithm", algorithm || "-"],
           ["Key Status", dkim.isRevoked ? "Revoked" : dkim.keyExists ? "Valid public key found" : "Not found"],
         ].map(([k, v]) => (
           <div key={k} className="flex items-center gap-2">

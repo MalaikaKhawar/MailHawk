@@ -59,7 +59,7 @@ export default function RelayMap({ ipResults }: Props) {
             <div style="color:${color};font-weight:bold;margin-bottom:6px">Hop #${ip.hopNumber}</div>
             <div><span style="color:#555566">IP: </span>${ip.ip}</div>
             <div><span style="color:#555566">Location: </span>${ip.city}, ${ip.country}</div>
-            <div><span style="color:#555566">ISP: </span>${ip.isp || "—"}</div>
+            <div><span style="color:#555566">ISP: </span>${ip.isp || "-"}</div>
             <div><span style="color:#555566">Abuse Score: </span><span style="color:${color}">${ip.abuseScore}/100</span></div>
             ${ip.isTor ? '<div style="color:#ff4444;margin-top:4px">⚠ Tor Node</div>' : ""}
             ${ip.isProxy ? '<div style="color:#ffaa00;margin-top:4px">⚠ Proxy Detected</div>' : ""}

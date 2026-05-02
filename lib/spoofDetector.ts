@@ -152,11 +152,11 @@ export function detectSpoof(parsed: ParsedHeader): SpoofDetectionResult {
     severity: spf === "fail" ? "HIGH" : "MEDIUM",
     detail:
       spf === "pass"
-        ? "SPF check passed — sending server is authorized."
+        ? "SPF check passed - sending server is authorized."
         : spf === "fail"
-        ? "SPF hard fail — sending server is NOT authorized to send for this domain."
+        ? "SPF hard fail - sending server is NOT authorized to send for this domain."
         : spf === "softfail"
-        ? "SPF soft fail — sending server is not in the authorized list."
+        ? "SPF soft fail - sending server is not in the authorized list."
         : "No SPF record found for this domain.",
     pointsAdded: spfPoints,
   });
@@ -171,9 +171,9 @@ export function detectSpoof(parsed: ParsedHeader): SpoofDetectionResult {
     severity: dkim === "fail" ? "HIGH" : "MEDIUM",
     detail:
       dkim === "pass"
-        ? "DKIM signature verified — email content was not tampered with."
+        ? "DKIM signature verified - email content was not tampered with."
         : dkim === "fail"
-        ? "DKIM signature failed — email may have been modified in transit."
+        ? "DKIM signature failed - email may have been modified in transit."
         : "No DKIM signature present.",
     pointsAdded: dkimPoints,
   });
@@ -188,9 +188,9 @@ export function detectSpoof(parsed: ParsedHeader): SpoofDetectionResult {
     severity: dmarc === "fail" ? "HIGH" : "LOW",
     detail:
       dmarc === "pass"
-        ? "DMARC policy passed — email is aligned with domain policy."
+        ? "DMARC policy passed - email is aligned with domain policy."
         : dmarc === "fail"
-        ? "DMARC policy failed — email does not comply with domain's DMARC policy."
+        ? "DMARC policy failed - email does not comply with domain's DMARC policy."
         : "DMARC record not found or not checked.",
     pointsAdded: dmarcPoints,
   });
@@ -203,8 +203,8 @@ export function detectSpoof(parsed: ParsedHeader): SpoofDetectionResult {
     severity: "LOW",
     detail:
       hopCount <= 7
-        ? `${hopCount} relay hops — within normal range.`
-        : `${hopCount} relay hops — unusually high, may indicate obfuscation.`,
+        ? `${hopCount} relay hops - within normal range.`
+        : `${hopCount} relay hops - unusually high, may indicate obfuscation.`,
     pointsAdded: check8Points,
   });
   const ONE_HOUR = 3600;
@@ -224,7 +224,7 @@ export function detectSpoof(parsed: ParsedHeader): SpoofDetectionResult {
     detail:
       longDelayHops.length === 0
         ? "No abnormal delays between relay hops."
-        : `Hops ${longDelayHops.join(", ")} had delays over 1 hour — suspicious.`,
+        : `Hops ${longDelayHops.join(", ")} had delays over 1 hour - suspicious.`,
     pointsAdded: delayPoints,
   });
   let privateInPublicPoints = 0;
@@ -252,7 +252,7 @@ export function detectSpoof(parsed: ParsedHeader): SpoofDetectionResult {
     detail:
       privateInPublicPoints === 0
         ? "No private IP addresses found between public relay hops."
-        : "A private IP address appears between public relay hops — unusual routing pattern.",
+        : "A private IP address appears between public relay hops - unusual routing pattern.",
     pointsAdded: privateInPublicPoints,
   });
   const spamScorePoints = parsed.xSpamScore > 5 ? 15 : 0;
@@ -263,8 +263,8 @@ export function detectSpoof(parsed: ParsedHeader): SpoofDetectionResult {
     severity: "MEDIUM",
     detail:
       parsed.xSpamScore <= 5
-        ? `X-Spam-Score is ${parsed.xSpamScore} — within acceptable range.`
-        : `X-Spam-Score is ${parsed.xSpamScore} — above threshold of 5.`,
+        ? `X-Spam-Score is ${parsed.xSpamScore} - within acceptable range.`
+        : `X-Spam-Score is ${parsed.xSpamScore} - above threshold of 5.`,
     pointsAdded: spamScorePoints,
   });
   let missingPoints = 0;
@@ -274,7 +274,7 @@ export function detectSpoof(parsed: ParsedHeader): SpoofDetectionResult {
       name: "Missing Date Header",
       passed: false,
       severity: "MEDIUM",
-      detail: "Date header is absent — required by RFC 2822.",
+      detail: "Date header is absent - required by RFC 2822.",
       pointsAdded: 10,
     });
   }
@@ -284,7 +284,7 @@ export function detectSpoof(parsed: ParsedHeader): SpoofDetectionResult {
       name: "Missing Message-ID Header",
       passed: false,
       severity: "MEDIUM",
-      detail: "Message-ID header is absent — required for tracking and deduplication.",
+      detail: "Message-ID header is absent - required for tracking and deduplication.",
       pointsAdded: 10,
     });
   }

@@ -52,7 +52,7 @@ export default function LoadingTerminal() {
           <div className="w-3 h-3 rounded-full bg-hawk-warning/50" />
           <div className="w-3 h-3 rounded-full bg-hawk-green/50" />
         </div>
-        <span className="text-xs font-mono text-[#444455] ml-2">mailhawk — forensic-engine</span>
+        <span className="text-xs font-mono text-[#444455] ml-2">mailhawk - forensic-engine</span>
       </div>
 
       

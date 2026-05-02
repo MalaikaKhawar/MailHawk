@@ -15,7 +15,7 @@ const FALLBACK_VERDICT: AIVerdict = {
   verdict: "SUSPICIOUS",
   confidence: 50,
   phishingProbability: 50,
-  oneLinerVerdict: "AI analysis unavailable — manual review recommended.",
+  oneLinerVerdict: "AI analysis unavailable - manual review recommended.",
   summary: "The AI forensic analysis could not be completed. Please review the header fields, SPF/DKIM/DMARC results, and relay hops manually using the data provided below.",
   redFlags: [],
   trustIndicators: [],

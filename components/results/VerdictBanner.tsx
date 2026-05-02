@@ -47,7 +47,7 @@ function scoreColor(n: number) {
   return n >= 70 ? "#aaff45" : n >= 40 ? "#ffaa00" : "#ff4444";
 }
 
-/** Uniform stat box — all stats use this same shell */
+/** Uniform stat box - all stats use this same shell */
 function StatBox({
   label,
   value,

@@ -573,7 +573,7 @@ function LabelValue({ label, value }: { label: string; value: string }) {
   return (
     <View style={S.row}>
       <Text style={S.rowLabel}>{label}</Text>
-      <Text style={S.rowValue}>{value || "—"}</Text>
+      <Text style={S.rowValue}>{value || "-"}</Text>
     </View>
   );
 }
@@ -660,9 +660,9 @@ function MailHawkPDF({ data }: { data: AnalysisResult }) {
           <View style={{ borderTopWidth: 1, borderTopColor: C.border, paddingTop: 18, flexDirection: "row", gap: 32 }}>
             {[
               ["GENERATED",   genDate],
-              ["FROM DOMAIN", ph.fromDomain || "—"],
-              ["SUBJECT",     ph.subject ? ph.subject.slice(0, 40) + (ph.subject.length > 40 ? "…" : "") : "—"],
-              ["TRUST SCORE", ts ? ts.label : "—"],
+              ["FROM DOMAIN", ph.fromDomain || "-"],
+              ["SUBJECT",     ph.subject ? ph.subject.slice(0, 40) + (ph.subject.length > 40 ? "…" : "") : "-"],
+              ["TRUST SCORE", ts ? ts.label : "-"],
             ].map(([k, v]) => (
               <View key={k} style={{ flex: 1 }}>
                 <Text style={{ fontFamily: "DM Mono", fontSize: 6.5, color: C.dimmer, letterSpacing: 1, marginBottom: 4 }}>{k}</Text>
@@ -702,10 +702,10 @@ function MailHawkPDF({ data }: { data: AnalysisResult }) {
                 ["Date",            ph.date],
                 ["Message-ID",      ph.messageId],
                 ["Return-Path",     ph.returnPath],
-                ["Reply-To",        ph.replyTo || "—"],
-                ["X-Originating-IP", ph.xOriginatingIp || "—"],
-                ["X-Mailer",        ph.xMailer || "—"],
-                ["X-Spam-Score",    ph.xSpamScore !== undefined ? String(ph.xSpamScore) : "—"],
+                ["Reply-To",        ph.replyTo || "-"],
+                ["X-Originating-IP", ph.xOriginatingIp || "-"],
+                ["X-Mailer",        ph.xMailer || "-"],
+                ["X-Spam-Score",    ph.xSpamScore !== undefined ? String(ph.xSpamScore) : "-"],
               ].map(([label, val], i) => (
                 <View key={label}
                   style={[
@@ -714,7 +714,7 @@ function MailHawkPDF({ data }: { data: AnalysisResult }) {
                   ]}
                 >
                   <Text style={S.rowLabel}>{label}</Text>
-                  <Text style={S.rowValue}>{val || "—"}</Text>
+                  <Text style={S.rowValue}>{val || "-"}</Text>
                 </View>
               ))}
             </View>
@@ -742,7 +742,7 @@ function MailHawkPDF({ data }: { data: AnalysisResult }) {
                       {record.length > 90 ? record.slice(0, 90) + "…" : record}
                     </Text>
                   )}
-                  <Text style={S.authBlockExplanation}>{explanation || "—"}</Text>
+                  <Text style={S.authBlockExplanation}>{explanation || "-"}</Text>
                 </View>
               </View>
             ))}
@@ -774,14 +774,14 @@ function MailHawkPDF({ data }: { data: AnalysisResult }) {
                 {ph.relayHops.map((hop, i) => (
                   <View key={hop.hopNumber} style={i % 2 === 0 ? S.tableRow : S.tableRowAlt}>
                     <Text style={[S.tdHighlight, { flex: 0.3, color: C.green }]}>{hop.hopNumber}</Text>
-                    <Text style={[S.td, { flex: 1 }]}>{hop.from || "—"}</Text>
-                    <Text style={[S.td, { flex: 1 }]}>{hop.by || "—"}</Text>
+                    <Text style={[S.td, { flex: 1 }]}>{hop.from || "-"}</Text>
+                    <Text style={[S.td, { flex: 1 }]}>{hop.by || "-"}</Text>
                     <Text style={[S.td, { flex: 1.5, color: hop.isPrivateIp ? C.dimmer : C.text }]}>
-                      {hop.ip || "—"}{hop.isPrivateIp ? " (private)" : ""}
+                      {hop.ip || "-"}{hop.isPrivateIp ? " (private)" : ""}
                     </Text>
                     <Text style={[S.td, { flex: 1 }]}>{hop.protocol}</Text>
                     <Text style={[S.td, { flex: 1, color: hop.delaySeconds > 3600 ? C.warn : C.muted }]}>
-                      {hop.delaySeconds > 0 ? `${hop.delaySeconds}s` : "—"}
+                      {hop.delaySeconds > 0 ? `${hop.delaySeconds}s` : "-"}
                     </Text>
                   </View>
                 ))}
@@ -802,8 +802,8 @@ function MailHawkPDF({ data }: { data: AnalysisResult }) {
                 {ipResults.map((ip, i) => (
                   <View key={ip.ip} style={i % 2 === 0 ? S.tableRow : S.tableRowAlt}>
                     <Text style={[S.tdHighlight, { flex: 1.2 }]}>{ip.ip}</Text>
-                    <Text style={[S.td, { flex: 1 }]}>{ip.city ? `${ip.city}, ` : ""}{ip.countryCode || "—"}</Text>
-                    <Text style={[S.td, { flex: 1.5 }]}>{(ip.isp || ip.org || "—").slice(0, 28)}</Text>
+                    <Text style={[S.td, { flex: 1 }]}>{ip.city ? `${ip.city}, ` : ""}{ip.countryCode || "-"}</Text>
+                    <Text style={[S.td, { flex: 1.5 }]}>{(ip.isp || ip.org || "-").slice(0, 28)}</Text>
                     <Text style={[S.td, { flex: 1 }]}>{ip.abuseScore}/100</Text>
                     <Text style={[S.td, { flex: 1, color: verdictColor(ip.riskLevel === "CLEAN" ? "SAFE" : ip.riskLevel === "MALICIOUS" ? "SPOOFED" : "SUSPICIOUS") }]}>
                       {ip.riskLevel}
@@ -950,8 +950,8 @@ function MailHawkPDF({ data }: { data: AnalysisResult }) {
           {ai && (
             <View style={{ borderWidth: 1, borderColor: C.border, flexDirection: "row", overflow: "hidden" }}>
               {[
-                ["AI CONFIDENCE",      `${ai.confidence ?? "—"}%`,          C.text],
-                ["PHISHING PROBABILITY", `${ai.phishingProbability ?? "—"}%`, ai.phishingProbability >= 60 ? C.danger : ai.phishingProbability >= 30 ? C.warn : C.green],
+                ["AI CONFIDENCE",      `${ai.confidence ?? "-"}%`,          C.text],
+                ["PHISHING PROBABILITY", `${ai.phishingProbability ?? "-"}%`, ai.phishingProbability >= 60 ? C.danger : ai.phishingProbability >= 30 ? C.warn : C.green],
                 ["RISK SCORE",          `${riskScore} / 100`,                rColor],
               ].map(([label, value, color], i) => (
                 <View key={label as string} style={{

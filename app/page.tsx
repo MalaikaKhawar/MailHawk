@@ -39,7 +39,7 @@ const FEATURES = [
 
 const STEPS = [
   { step: "01", title: "Paste or upload", desc: "Copy the raw email header from your email client (View Source), paste it, or drop a .eml file." },
-  { step: "02", title: "Click Analyze", desc: "MailHawk runs all forensic checks — DNS, IP reputation, AI analysis — in seconds." },
+  { step: "02", title: "Click Analyze", desc: "MailHawk runs all forensic checks - DNS, IP reputation, AI analysis - in seconds." },
   { step: "03", title: "Read the verdict", desc: "Get a clear SAFE / SUSPICIOUS / SPOOFED verdict with detailed breakdown and recommendations." },
 ];
 
@@ -59,7 +59,7 @@ export default function HomePage() {
             
             <div className="text-center mb-14">
               <p className="font-mono text-[0.68rem] tracking-[0.14em] uppercase text-hawk-green mb-[0.85rem]">
-                — What MailHawk Does
+                - What MailHawk Does
               </p>
               <h2 className="font-serif text-[clamp(2rem,5vw,3.2rem)] font-normal text-hawk-text leading-[1.15] m-0">
                 Email forensics, <em className="text-hawk-green">simplified</em>
@@ -95,7 +95,7 @@ export default function HomePage() {
           <div className="max-w-225 mx-auto">
             <div className="text-center mb-14">
               <p className="font-mono text-[0.68rem] tracking-[0.14em] uppercase text-hawk-green mb-[0.85rem]">
-                — Quick Start
+                - Quick Start
               </p>
               <h2 className="font-serif text-[clamp(2rem,4.5vw,2.8rem)] font-normal text-hawk-text leading-[1.15] m-0">
                 Three steps to <em className="text-hawk-green">clarity</em>

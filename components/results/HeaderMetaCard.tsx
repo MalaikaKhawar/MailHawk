@@ -15,16 +15,16 @@ export default function HeaderMetaCard({ header }: Props) {
     { icon: Hash, label: "Subject", value: header.subject, mono: false },
     { icon: Calendar, label: "Date", value: formatDate(header.date), mono: false },
     { icon: AtSign, label: "Message-ID", value: header.messageId, mono: true },
-    { icon: CornerUpRight, label: "Return-Path", value: header.returnPath || "—", mono: true },
-    { icon: Reply, label: "Reply-To", value: header.replyTo || "—", mono: true },
+    { icon: CornerUpRight, label: "Return-Path", value: header.returnPath || "-", mono: true },
+    { icon: Reply, label: "Reply-To", value: header.replyTo || "-", mono: true },
   ];
 
   const extras = [
-    { label: "X-Originating-IP", value: header.xOriginatingIp || "—" },
-    { label: "X-Mailer", value: header.xMailer || "—" },
-    { label: "X-Spam-Score", value: header.xSpamScore > 0 ? String(header.xSpamScore) : "—" },
-    { label: "Content-Type", value: header.contentType || "—" },
-    { label: "MIME-Version", value: header.mimeVersion || "—" },
+    { label: "X-Originating-IP", value: header.xOriginatingIp || "-" },
+    { label: "X-Mailer", value: header.xMailer || "-" },
+    { label: "X-Spam-Score", value: header.xSpamScore > 0 ? String(header.xSpamScore) : "-" },
+    { label: "Content-Type", value: header.contentType || "-" },
+    { label: "MIME-Version", value: header.mimeVersion || "-" },
   ];
 
   return (
@@ -45,7 +45,7 @@ export default function HeaderMetaCard({ header }: Props) {
                 className={`text-xs break-all leading-relaxed ${mono ? "font-mono text-hawk-text" : "text-hawk-text"}`}
                 style={mono ? { fontFamily: "var(--font-dm-mono)" } : undefined}
               >
-                {value || "—"}
+                {value || "-"}
               </p>
             </div>
           </div>
