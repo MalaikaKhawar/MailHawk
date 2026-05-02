@@ -26,7 +26,7 @@ export default function AIVerdictCard({ verdict }: Props) {
 
   return (
     <div className="card-hawk p-6">
-      {/* Header */}
+      
       <div className="flex items-center gap-3 mb-6">
         <div className="w-9 h-9 rounded-none bg-hawk-green/10 border border-hawk-green/20 flex items-center justify-center">
           <Brain className="w-5 h-5 text-hawk-green" />
@@ -37,7 +37,7 @@ export default function AIVerdictCard({ verdict }: Props) {
         </div>
       </div>
 
-      {/* One-liner */}
+      
       <div className="p-4 rounded-none bg-hawk-bg border border-hawk-border mb-6">
         <p
           className="text-lg leading-relaxed text-hawk-text"
@@ -47,14 +47,14 @@ export default function AIVerdictCard({ verdict }: Props) {
         </p>
       </div>
 
-      {/* Summary */}
+      
       <div className="mb-6">
         <h3 className="text-xs font-mono font-bold text-hawk-muted tracking-widest uppercase mb-3">Summary</h3>
         <p className="text-sm text-hawk-muted leading-relaxed">{verdict.summary}</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-        {/* Red Flags */}
+        
         {verdict.redFlags.length > 0 && (
           <div>
             <h3 className="text-xs font-mono font-bold text-hawk-danger tracking-widest uppercase mb-3 flex items-center gap-1.5">
@@ -87,7 +87,7 @@ export default function AIVerdictCard({ verdict }: Props) {
           </div>
         )}
 
-        {/* Trust Indicators */}
+        
         {verdict.trustIndicators.length > 0 && (
           <div>
             <h3 className="text-xs font-mono font-bold text-hawk-green tracking-widest uppercase mb-3 flex items-center gap-1.5">
@@ -106,7 +106,7 @@ export default function AIVerdictCard({ verdict }: Props) {
         )}
       </div>
 
-      {/* Recommendations */}
+      
       {verdict.recommendations.length > 0 && (
         <div className="mb-6">
           <h3 className="text-xs font-mono font-bold text-hawk-muted tracking-widest uppercase mb-3 flex items-center gap-1.5">
@@ -132,7 +132,7 @@ export default function AIVerdictCard({ verdict }: Props) {
         </div>
       )}
 
-      {/* Technical Breakdown — expandable */}
+      
       <button
         onClick={() => setShowTech(!showTech)}
         className="flex items-center gap-2 text-xs font-mono text-hawk-muted hover:text-hawk-muted transition-colors w-full"

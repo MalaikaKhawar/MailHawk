@@ -1,7 +1,5 @@
 import type { ParsedHeader, SpoofDetectionResult, SpoofCheck } from "@/types";
-import { getRootDomain } from "./utils";
-
-// ─── Known phishing brands (display name spoof detection) ─────────────────────
+import { getRootDomain } from "./utils";
 export const KNOWN_BRANDS: Record<string, string[]> = {
   paypal: ["paypal.com"],
   apple: ["apple.com", "icloud.com"],
@@ -26,9 +24,7 @@ export const KNOWN_BRANDS: Record<string, string[]> = {
   github: ["github.com"],
   anthropic: ["anthropic.com"],
   openai: ["openai.com", "chatgpt.com"],
-};
-
-// ─── Lookalike domain patterns ─────────────────────────────────────────────
+};
 const LOOKALIKE_PATTERNS: RegExp[] = [
   /paypa[l1]\.com/i,
   /app[l1]e\.com/i,
@@ -36,12 +32,10 @@ const LOOKALIKE_PATTERNS: RegExp[] = [
   /amaz[o0]n\.com/i,
   /micr[o0]s[o0]ft\.com/i,
   /netf[l1][i!]x\.com/i,
-  /[a-z]+-[a-z]+-[a-z]+\.(com|net|org|info)/i, // over-hyphenated
+  /[a-z]+-[a-z]+-[a-z]+\.(com|net|org|info)/i,
 ];
 
-const SUSPICIOUS_TLDS = [".xyz", ".tk", ".ml", ".ga", ".cf", ".gq", ".ws", ".top", ".club", ".online", ".site"];
-
-// ─── Helpers ──────────────────────────────────────────────────────────────────
+const SUSPICIOUS_TLDS = [".xyz", ".tk", ".ml", ".ga", ".cf", ".gq", ".ws", ".top", ".club", ".online", ".site"];
 
 function extractDomain(email: string): string {
   const parts = email.split("@");
@@ -57,12 +51,11 @@ function domainsMatch(a: string, b: string): boolean {
   return getRootDomain(lowerA) === getRootDomain(lowerB);
 }
 
-function isLookalikeDomain(domain: string): boolean {
-  // First, if it's an exact match for any genuine brand domain, it's NOT a lookalike.
+function isLookalikeDomain(domain: string): boolean {
   const rootDomain = getRootDomain(domain);
   const allGenuineDomains = Object.values(KNOWN_BRANDS).flat();
   if (allGenuineDomains.includes(rootDomain)) {
-    return false; // It's genuine!
+    return false;
   }
   
   return LOOKALIKE_PATTERNS.some((p) => p.test(domain));
@@ -83,9 +76,7 @@ function getBrandForName(displayName: string): string | null {
 function isLegitDomainForBrand(domain: string, brand: string): boolean {
   const legit = KNOWN_BRANDS[brand] || [];
   return legit.some((d) => domain.endsWith(d));
-}
-
-// ─── Main Detector ────────────────────────────────────────────────────────────
+}
 
 export function detectSpoof(parsed: ParsedHeader): SpoofDetectionResult {
   const checks: SpoofCheck[] = [];
@@ -96,9 +87,7 @@ export function detectSpoof(parsed: ParsedHeader): SpoofDetectionResult {
   const replyToDomain = extractDomain(parsed.replyTo);
   const messageIdDomain = parsed.messageId
     ? (parsed.messageId.match(/@([^\s>]+)/) || [])[1] || ""
-    : "";
-
-  // ── 1. From domain vs Return-Path domain ──────────────────────────────────
+    : "";
   const check1Passed =
     !returnPathDomain || domainsMatch(fromDomain, returnPathDomain);
   const check1Points = check1Passed ? 0 : 35;
@@ -111,9 +100,7 @@ export function detectSpoof(parsed: ParsedHeader): SpoofDetectionResult {
       ? `From domain (${fromDomain}) matches Return-Path domain.`
       : `From domain (${fromDomain}) does NOT match Return-Path (${returnPathDomain}). Major spoofing indicator.`,
     pointsAdded: check1Points,
-  });
-
-  // ── 2. From domain vs Reply-To domain ────────────────────────────────────
+  });
   const check2Passed = !replyToDomain || domainsMatch(fromDomain, replyToDomain);
   const check2Points = check2Passed ? 0 : 25;
   riskScore += check2Points;
@@ -125,9 +112,7 @@ export function detectSpoof(parsed: ParsedHeader): SpoofDetectionResult {
       ? `Reply-To domain matches From domain.`
       : `Reply-To domain (${replyToDomain}) differs from From domain (${fromDomain}). Replies will go elsewhere.`,
     pointsAdded: check2Points,
-  });
-
-  // ── 3. Message-ID domain vs From domain ───────────────────────────────────
+  });
   const check3Passed = !messageIdDomain || domainsMatch(fromDomain, messageIdDomain);
   const check3Points = check3Passed ? 0 : 15;
   riskScore += check3Points;
@@ -139,9 +124,7 @@ export function detectSpoof(parsed: ParsedHeader): SpoofDetectionResult {
       ? `Message-ID domain matches From domain.`
       : `Message-ID domain (${messageIdDomain}) differs from From domain (${fromDomain}).`,
     pointsAdded: check3Points,
-  });
-
-  // ── 4. Display name brand spoof ───────────────────────────────────────────
+  });
   const brand = getBrandForName(parsed.from.name);
   const check4Passed = !brand || isLegitDomainForBrand(fromDomain, brand);
   const check4Points = check4Passed ? 0 : 40;
@@ -156,9 +139,7 @@ export function detectSpoof(parsed: ParsedHeader): SpoofDetectionResult {
         : "No known brand detected in display name."
       : `Display name "${parsed.from.name}" impersonates ${brand} but email domain is "${fromDomain}".`,
     pointsAdded: check4Points,
-  });
-
-  // ── 5. SPF check ──────────────────────────────────────────────────────────
+  });
   const spf = parsed.authResults.spf;
   let spfPoints = 0;
   if (spf === "fail") spfPoints = 30;
@@ -178,9 +159,7 @@ export function detectSpoof(parsed: ParsedHeader): SpoofDetectionResult {
         ? "SPF soft fail — sending server is not in the authorized list."
         : "No SPF record found for this domain.",
     pointsAdded: spfPoints,
-  });
-
-  // ── 6. DKIM check ─────────────────────────────────────────────────────────
+  });
   const dkim = parsed.authResults.dkim;
   let dkimPoints = 0;
   if (dkim === "fail") dkimPoints = 25;
@@ -197,9 +176,7 @@ export function detectSpoof(parsed: ParsedHeader): SpoofDetectionResult {
         ? "DKIM signature failed — email may have been modified in transit."
         : "No DKIM signature present.",
     pointsAdded: dkimPoints,
-  });
-
-  // ── 7. DMARC check ────────────────────────────────────────────────────────
+  });
   const dmarc = parsed.authResults.dmarc;
   let dmarcPoints = 0;
   if (dmarc === "fail") dmarcPoints = 20;
@@ -216,9 +193,7 @@ export function detectSpoof(parsed: ParsedHeader): SpoofDetectionResult {
         ? "DMARC policy failed — email does not comply with domain's DMARC policy."
         : "DMARC record not found or not checked.",
     pointsAdded: dmarcPoints,
-  });
-
-  // ── 8. Excessive relay hops ───────────────────────────────────────────────
+  });
   const hopCount = parsed.relayHops.length;
   const check8Points = hopCount > 7 ? 10 : 0;
   riskScore += check8Points;
@@ -231,9 +206,7 @@ export function detectSpoof(parsed: ParsedHeader): SpoofDetectionResult {
         ? `${hopCount} relay hops — within normal range.`
         : `${hopCount} relay hops — unusually high, may indicate obfuscation.`,
     pointsAdded: check8Points,
-  });
-
-  // ── 9. Long hop delays ────────────────────────────────────────────────────
+  });
   const ONE_HOUR = 3600;
   let delayPoints = 0;
   const longDelayHops: number[] = [];
@@ -253,9 +226,7 @@ export function detectSpoof(parsed: ParsedHeader): SpoofDetectionResult {
         ? "No abnormal delays between relay hops."
         : `Hops ${longDelayHops.join(", ")} had delays over 1 hour — suspicious.`,
     pointsAdded: delayPoints,
-  });
-
-  // ── 10. Private IP between public IPs ──────────────────────────────────────
+  });
   let privateInPublicPoints = 0;
   const publicHops = parsed.relayHops.filter((h) => h.ip && !h.isPrivateIp);
   if (publicHops.length >= 2) {
@@ -283,9 +254,7 @@ export function detectSpoof(parsed: ParsedHeader): SpoofDetectionResult {
         ? "No private IP addresses found between public relay hops."
         : "A private IP address appears between public relay hops — unusual routing pattern.",
     pointsAdded: privateInPublicPoints,
-  });
-
-  // ── 11. X-Spam-Score ──────────────────────────────────────────────────────
+  });
   const spamScorePoints = parsed.xSpamScore > 5 ? 15 : 0;
   riskScore += spamScorePoints;
   checks.push({
@@ -297,9 +266,7 @@ export function detectSpoof(parsed: ParsedHeader): SpoofDetectionResult {
         ? `X-Spam-Score is ${parsed.xSpamScore} — within acceptable range.`
         : `X-Spam-Score is ${parsed.xSpamScore} — above threshold of 5.`,
     pointsAdded: spamScorePoints,
-  });
-
-  // ── 12. Missing standard headers ──────────────────────────────────────────
+  });
   let missingPoints = 0;
   if (!parsed.date) {
     missingPoints += 10;
@@ -321,9 +288,7 @@ export function detectSpoof(parsed: ParsedHeader): SpoofDetectionResult {
       pointsAdded: 10,
     });
   }
-  riskScore += missingPoints;
-
-  // ── 13. Lookalike From domain ─────────────────────────────────────────────
+  riskScore += missingPoints;
   const lookalike = isLookalikeDomain(fromDomain);
   const lookalikeTld = isSuspiciousTld(fromDomain);
   const lookalikePoints = lookalike ? 25 : lookalikeTld ? 10 : 0;
@@ -339,21 +304,15 @@ export function detectSpoof(parsed: ParsedHeader): SpoofDetectionResult {
         ? `From domain "${fromDomain}" uses a suspicious TLD.`
         : `From domain "${fromDomain}" appears legitimate.`,
     pointsAdded: lookalikePoints,
-  });
-
-  // ── Cap score ─────────────────────────────────────────────────────────────
-  riskScore = Math.min(100, riskScore);
-
-  // ── Phishing Probability ──────────────────────────────────────────────────
+  });
+  riskScore = Math.min(100, riskScore);
   let phishing = 0;
   if (brand && !isLegitDomainForBrand(fromDomain, brand)) phishing += 40;
   if (lookalike) phishing += 30;
   if (lookalikeTld) phishing += 15;
-  if (!check2Passed) phishing += 20; // reply-to mismatch
+  if (!check2Passed) phishing += 20;
   if (spf === "fail" || spf === "softfail") phishing += 15;
-  phishing = Math.min(100, phishing);
-
-  // ── Verdict ───────────────────────────────────────────────────────────────
+  phishing = Math.min(100, phishing);
   let verdict: SpoofDetectionResult["verdict"] = "SAFE";
   if (riskScore >= 61) verdict = "SPOOFED";
   else if (riskScore >= 31) verdict = "SUSPICIOUS";

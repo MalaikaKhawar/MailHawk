@@ -3,16 +3,8 @@ import {
 } from "@react-pdf/renderer";
 import type { AnalysisResult } from "@/types";
 import React from "react";
-import path from "path";
-
-// Resolve font files from the local public/fonts directory
-// (avoids remote fetch issues — all fonts are bundled at build time)
-const F = (name: string) => path.join(process.cwd(), "public", "fonts", name);
-
-// ─── Font Registration ────────────────────────────────────────────────────────
-// Using stable GitHub raw URLs from google/fonts official repo (TTF, not variable)
-
-// ─── DM Mono — monospace (headings, labels, tables, code-like text) ──────────
+import path from "path";
+const F = (name: string) => path.join(process.cwd(), "public", "fonts", name);
 Font.register({
   family: "DM Mono",
   fonts: [
@@ -21,9 +13,7 @@ Font.register({
     { src: F("DMMono-Italic.ttf"),        fontWeight: 400, fontStyle: "italic" },
     { src: F("DMMono-MediumItalic.ttf"),  fontWeight: 500, fontStyle: "italic" },
   ],
-});
-
-// ─── Lato — body sans-serif (replaces DM Sans, no variable-font issues) ───────
+});
 Font.register({
   family: "Lato",
   fonts: [
@@ -34,18 +24,14 @@ Font.register({
     { src: F("Lato-MediumItalic.ttf"),  fontWeight: 500, fontStyle: "italic" },
     { src: F("Lato-BoldItalic.ttf"),    fontWeight: 700, fontStyle: "italic" },
   ],
-});
-
-// ─── Instrument Serif — cover headline serif ───────────────────────────────────
+});
 Font.register({
   family: "Instrument Serif",
   fonts: [
     { src: F("InstrumentSerif-Regular.ttf"), fontWeight: 400 },
     { src: F("InstrumentSerif-Italic.ttf"),  fontWeight: 400, fontStyle: "italic" },
   ],
-});
-
-// ─── Design Tokens — exact match with globals.css ────────────────────────────
+});
 const C = {
   bg:          "#0E2B1A",
   bgDeep:      "#0A1F13",
@@ -62,12 +48,9 @@ const C = {
   danger:      "#ff5252",
   warn:        "#ffaa00",
   safe:        "#aaff45",
-};
+};
 
-// ─── Styles ─────────────────────────────────────────────────────────────────
-
-const S = StyleSheet.create({
-  // Pages
+const S = StyleSheet.create({
   coverPage: {
     backgroundColor: C.bgDeep,
     color: C.text,
@@ -81,9 +64,7 @@ const S = StyleSheet.create({
     color: C.text,
     padding: 0,
     fontSize: 9,
-  },
-
-  // ── Cover layout ─────────────────────────────────────────────────────────
+  },
   coverTopBar: {
     backgroundColor: C.card,
     borderBottomWidth: 1,
@@ -124,9 +105,7 @@ const S = StyleSheet.create({
     fontSize: 7,
     color: C.dimmer,
     letterSpacing: 0.5,
-  },
-
-  // Cover hero
+  },
   coverHero: {
     flex: 1,
     paddingHorizontal: 48,
@@ -154,9 +133,7 @@ const S = StyleSheet.create({
     lineHeight: 1.6,
     maxWidth: 360,
     marginBottom: 40,
-  },
-
-  // Verdict strip on cover
+  },
   verdictStrip: {
     flexDirection: "row",
     alignItems: "stretch",
@@ -217,17 +194,13 @@ const S = StyleSheet.create({
     borderLeftWidth: 2,
     borderLeftColor: C.border,
     paddingLeft: 12,
-  },
-
-  // ── Page content wrapper ──────────────────────────────────────────────────
+  },
   pageBody: {
     flex: 1,
     paddingHorizontal: 40,
     paddingTop: 32,
     paddingBottom: 48,
-  },
-
-  // ── Page Header Bar ────────────────────────────────────────────────────────
+  },
   pageTopBar: {
     backgroundColor: C.card,
     borderBottomWidth: 1,
@@ -249,9 +222,7 @@ const S = StyleSheet.create({
     fontFamily: "DM Mono",
     fontSize: 7,
     color: C.dimmer,
-  },
-
-  // ── Section ───────────────────────────────────────────────────────────────
+  },
   section: { marginBottom: 24 },
 
   sectionHeader: {
@@ -281,18 +252,14 @@ const S = StyleSheet.create({
     fontSize: 7,
     color: C.dimmer,
     marginLeft: "auto",
-  },
-
-  // ── Typography ─────────────────────────────────────────────────────────────
+  },
   paragraph: {
     fontFamily: "Lato",
     fontSize: 9,
     color: C.muted,
     lineHeight: 1.7,
     marginBottom: 6,
-  },
-
-  // ── Label/Value Row ────────────────────────────────────────────────────────
+  },
   row: {
     flexDirection: "row",
     marginBottom: 5,
@@ -313,9 +280,7 @@ const S = StyleSheet.create({
     color: C.text,
     flex: 1,
     lineHeight: 1.5,
-  },
-
-  // ── Auth result row ────────────────────────────────────────────────────────
+  },
   authBlock: {
     flexDirection: "row",
     marginBottom: 8,
@@ -356,9 +321,7 @@ const S = StyleSheet.create({
     fontSize: 8,
     color: C.muted,
     lineHeight: 1.5,
-  },
-
-  // ── Tables ─────────────────────────────────────────────────────────────────
+  },
   table: {
     borderWidth: 1,
     borderColor: C.border,
@@ -404,9 +367,7 @@ const S = StyleSheet.create({
     fontFamily: "DM Mono",
     fontSize: 7.5,
     color: C.text,
-  },
-
-  // ── Flag card ──────────────────────────────────────────────────────────────
+  },
   flagCard: {
     flexDirection: "row",
     marginBottom: 6,
@@ -447,9 +408,7 @@ const S = StyleSheet.create({
     backgroundColor: C.card,
     borderLeftWidth: 1,
     borderLeftColor: C.border,
-  },
-
-  // ── Recommendation item ────────────────────────────────────────────────────
+  },
   recItem: {
     flexDirection: "row",
     marginBottom: 5,
@@ -471,9 +430,7 @@ const S = StyleSheet.create({
     color: C.muted,
     flex: 1,
     lineHeight: 1.5,
-  },
-
-  // ── Trust indicators ────────────────────────────────────────────────────────
+  },
   trustItem: {
     flexDirection: "row",
     alignItems: "flex-start",
@@ -492,9 +449,7 @@ const S = StyleSheet.create({
     color: C.muted,
     flex: 1,
     lineHeight: 1.5,
-  },
-
-  // ── Technical breakdown grid ───────────────────────────────────────────────
+  },
   techGrid: {
     flexDirection: "row",
     flexWrap: "wrap",
@@ -522,9 +477,7 @@ const S = StyleSheet.create({
     fontSize: 8,
     color: C.muted,
     lineHeight: 1.6,
-  },
-
-  // ── Footer ─────────────────────────────────────────────────────────────────
+  },
   footer: {
     position: "absolute",
     bottom: 0,
@@ -550,9 +503,7 @@ const S = StyleSheet.create({
     fontSize: 7,
     color: C.dimmer,
   },
-});
-
-// ─── Helper functions ─────────────────────────────────────────────────────────
+});
 
 function verdictColor(v: string): string {
   if (v === "SAFE")       return C.safe;
@@ -588,9 +539,7 @@ function riskColor(score: number): string {
   if (score >= 61) return C.danger;
   if (score >= 31) return C.warn;
   return C.green;
-}
-
-// ─── Reusable Sub-components ──────────────────────────────────────────────────
+}
 
 function PageTopBar({ title, meta }: { title: string; meta?: string }) {
   return (
@@ -627,9 +576,7 @@ function LabelValue({ label, value }: { label: string; value: string }) {
       <Text style={S.rowValue}>{value || "—"}</Text>
     </View>
   );
-}
-
-// ─── PDF Document ─────────────────────────────────────────────────────────────
+}
 
 function MailHawkPDF({ data }: { data: AnalysisResult }) {
   const {
@@ -651,12 +598,10 @@ function MailHawkPDF({ data }: { data: AnalysisResult }) {
   return (
     <Document title="MailHawk Forensic Report" author="MailHawk" creator="MailHawk · mailhawk.app">
 
-      {/* ══════════════════════════════════════════════════════════════════════
-          PAGE 1 — Cover
-      ══════════════════════════════════════════════════════════════════════ */}
+      
       <Page size="A4" style={[S.coverPage, { fontFamily: "Lato" }]}>
 
-        {/* Top bar */}
+        
         <View style={S.coverTopBar}>
           <View style={S.coverLogoGroup}>
             <View style={S.coverLogoIcon}>
@@ -667,10 +612,10 @@ function MailHawkPDF({ data }: { data: AnalysisResult }) {
           <Text style={S.coverTopMeta}>EMAIL HEADER FORENSICS · AI SPOOF DETECTION</Text>
         </View>
 
-        {/* Hero */}
+        
         <View style={S.coverHero}>
           <View>
-            {/* Headline */}
+            
             <Text style={S.coverHeadline}>
               Forensic{"\n"}
               <Text style={S.coverHeadlineAccent}>Analysis</Text>{" "}
@@ -681,7 +626,7 @@ function MailHawkPDF({ data }: { data: AnalysisResult }) {
               IP reputation · Link inspection · Relay path tracing
             </Text>
 
-            {/* Verdict strip */}
+            
             <View style={S.verdictStrip}>
               <View style={S.verdictStripLabel}>
                 <Text style={{ fontFamily: "DM Mono", fontSize: 7, color: C.dimmer, letterSpacing: 1 }}>VERDICT</Text>
@@ -703,7 +648,7 @@ function MailHawkPDF({ data }: { data: AnalysisResult }) {
               )}
             </View>
 
-            {/* One-liner */}
+            
             {ai?.oneLinerVerdict && (
               <Text style={S.coverOneLiner}>
                 {ai.oneLinerVerdict}
@@ -711,7 +656,7 @@ function MailHawkPDF({ data }: { data: AnalysisResult }) {
             )}
           </View>
 
-          {/* Bottom meta grid */}
+          
           <View style={{ borderTopWidth: 1, borderTopColor: C.border, paddingTop: 18, flexDirection: "row", gap: 32 }}>
             {[
               ["GENERATED",   genDate],
@@ -734,21 +679,19 @@ function MailHawkPDF({ data }: { data: AnalysisResult }) {
 
       </Page>
 
-      {/* ══════════════════════════════════════════════════════════════════════
-          PAGE 2 — Executive Summary + Email Metadata + Auth
-      ══════════════════════════════════════════════════════════════════════ */}
+      
       <Page size="A4" style={S.page}>
         <PageTopBar title="FORENSIC REPORT" meta="SUMMARY & METADATA" />
 
         <View style={S.pageBody}>
 
-          {/* Executive Summary */}
+          
           <View style={S.section}>
             <SectionHeader title="Executive Summary" index="01" />
             <Text style={S.paragraph}>{ai?.summary || "No AI summary available. Please review the header data manually."}</Text>
           </View>
 
-          {/* Email Metadata */}
+          
           <View style={S.section}>
             <SectionHeader title="Email Metadata" index="02" />
             <View style={{ borderWidth: 1, borderColor: C.border, padding: 14, backgroundColor: C.bgAlt }}>
@@ -777,7 +720,7 @@ function MailHawkPDF({ data }: { data: AnalysisResult }) {
             </View>
           </View>
 
-          {/* Authentication Results */}
+          
           <View style={S.section}>
             <SectionHeader title="Authentication Results" index="03" />
 
@@ -810,15 +753,13 @@ function MailHawkPDF({ data }: { data: AnalysisResult }) {
         <Footer label="MailHawk · Forensic Report" />
       </Page>
 
-      {/* ══════════════════════════════════════════════════════════════════════
-          PAGE 3 — Relay Path + IP Reputation
-      ══════════════════════════════════════════════════════════════════════ */}
+      
       <Page size="A4" style={S.page}>
         <PageTopBar title="FORENSIC REPORT" meta="RELAY PATH & IP REPUTATION" />
 
         <View style={S.pageBody}>
 
-          {/* Relay Hops */}
+          
           <View style={S.section}>
             <SectionHeader title="Email Relay Path" index="04" />
             {ph.relayHops.length === 0 ? (
@@ -848,7 +789,7 @@ function MailHawkPDF({ data }: { data: AnalysisResult }) {
             )}
           </View>
 
-          {/* IP Reputation */}
+          
           {ipResults.length > 0 && (
             <View style={S.section}>
               <SectionHeader title="IP Reputation Analysis" index="05" />
@@ -873,7 +814,7 @@ function MailHawkPDF({ data }: { data: AnalysisResult }) {
             </View>
           )}
 
-          {/* Spoof Detection Checks */}
+          
           <View style={S.section}>
             <SectionHeader title="Spoof Detection Checks" index="06" />
             <View style={S.table}>
@@ -900,15 +841,13 @@ function MailHawkPDF({ data }: { data: AnalysisResult }) {
         <Footer label="MailHawk · Forensic Report" />
       </Page>
 
-      {/* ══════════════════════════════════════════════════════════════════════
-          PAGE 4 — AI Analysis, Flags, Recs
-      ══════════════════════════════════════════════════════════════════════ */}
+      
       <Page size="A4" style={S.page}>
         <PageTopBar title="FORENSIC REPORT" meta="AI ANALYSIS & RECOMMENDATIONS" />
 
         <View style={S.pageBody}>
 
-          {/* Link Analysis */}
+          
           {linkResults.length > 0 && (
             <View style={S.section}>
               <SectionHeader title="Link Analysis" index="07" />
@@ -932,7 +871,7 @@ function MailHawkPDF({ data }: { data: AnalysisResult }) {
             </View>
           )}
 
-          {/* Technical Breakdown */}
+          
           {ai?.technicalBreakdown && (
             <View style={S.section}>
               <SectionHeader title="AI Technical Breakdown" index="08" />
@@ -953,7 +892,7 @@ function MailHawkPDF({ data }: { data: AnalysisResult }) {
             </View>
           )}
 
-          {/* Red Flags */}
+          
           {ai?.redFlags && ai.redFlags.length > 0 && (
             <View style={S.section}>
               <SectionHeader title="Red Flags" index="09" />
@@ -974,7 +913,7 @@ function MailHawkPDF({ data }: { data: AnalysisResult }) {
             </View>
           )}
 
-          {/* Trust Indicators */}
+          
           {ai?.trustIndicators && ai.trustIndicators.length > 0 && (
             <View style={S.section}>
               <SectionHeader title="Trust Indicators" index="10" />
@@ -987,7 +926,7 @@ function MailHawkPDF({ data }: { data: AnalysisResult }) {
             </View>
           )}
 
-          {/* Recommendations */}
+          
           {ai?.recommendations && ai.recommendations.length > 0 && (
             <View style={S.section}>
               <SectionHeader title="Recommendations" index="11" />
@@ -1007,7 +946,7 @@ function MailHawkPDF({ data }: { data: AnalysisResult }) {
             </View>
           )}
 
-          {/* AI Confidence + Phishing Probability */}
+          
           {ai && (
             <View style={{ borderWidth: 1, borderColor: C.border, flexDirection: "row", overflow: "hidden" }}>
               {[
@@ -1037,9 +976,7 @@ function MailHawkPDF({ data }: { data: AnalysisResult }) {
 
     </Document>
   );
-}
-
-// ─── Export ───────────────────────────────────────────────────────────────────
+}
 
 export async function generatePdfReport(data: AnalysisResult): Promise<Buffer> {
   const buf = await renderToBuffer(<MailHawkPDF data={data} /> as any);

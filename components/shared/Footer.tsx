@@ -6,7 +6,7 @@ export default function Footer() {
     <footer className="border-t border-hawk-border bg-hawk-bg mt-20">
       <div className="max-w-7xl mx-auto px-6 py-10">
         <div className="flex flex-wrap gap-6 items-center justify-between">
-          {/* Brand */}
+          
           <div className="flex items-center gap-2">
             <div className="w-6 h-6 rounded-none bg-hawk-green flex items-center justify-center">
               <Shield className="w-3 h-3 text-hawk-bg" />
@@ -19,7 +19,7 @@ export default function Footer() {
             </span>
           </div>
 
-          {/* Links */}
+          
           <div className="flex items-center gap-6">
             {[
               { href: "/", label: "Analyze" },
@@ -44,14 +44,14 @@ export default function Footer() {
             </span>
           </div>
 
-          {/* Copyright */}
+          
           <p className="font-mono text-[0.68rem] text-hawk-border-hover m-0">
             © {new Date().getFullYear()} MailHawk - Developed with ❤️ by Malaika
             Yasmeen Khawar
           </p>
         </div>
 
-        {/* Security note */}
+        
         <div className="mt-6 pt-5 border-t border-hawk-border flex items-center gap-2">
           <span className="text-hawk-green font-mono text-xs">▸</span>
           <span className="font-mono text-[0.68rem] text-center text-hawk-muted">

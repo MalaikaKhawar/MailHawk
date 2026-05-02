@@ -6,8 +6,7 @@ export async function POST(req: NextRequest) {
     const { ips } = await req.json() as { ips: string[] };
     if (!ips || !Array.isArray(ips)) {
       return NextResponse.json({ error: "ips array required." }, { status: 400 });
-    }
-    // Build mock relay hops
+    }
     const hops = ips.map((ip, i) => ({
       hopNumber: i + 1, from: "", by: "", ip,
       protocol: "SMTP", timestamp: new Date().toISOString(),

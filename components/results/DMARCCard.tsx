@@ -47,7 +47,7 @@ export default function DMARCCard({ dmarc, fromResult }: Props) {
         </span>
       </div>
 
-      {/* Trustability score bar */}
+      
       <div className="mb-4">
         <div className="flex items-center justify-between mb-1.5">
           <span className="text-[10px] font-mono text-hawk-muted uppercase tracking-wider">Trustability</span>
@@ -64,7 +64,7 @@ export default function DMARCCard({ dmarc, fromResult }: Props) {
         </div>
       </div>
 
-      {/* Details */}
+      
       <div className="grid grid-cols-2 gap-2 mb-4">
         {[
           ["Policy", policy ? (
@@ -82,7 +82,7 @@ export default function DMARCCard({ dmarc, fromResult }: Props) {
         ))}
       </div>
 
-      {/* Policy explanation */}
+      
       {policy && (
         <div className="flex items-start gap-2 p-2.5 rounded-none bg-hawk-bg border border-(--hawk-border) mb-4">
           <Info className="w-3.5 h-3.5 mt-0.5 shrink-0" style={{ color: policy.color }} />

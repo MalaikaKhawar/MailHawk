@@ -21,7 +21,7 @@ export default function Navbar() {
     <header className="fixed top-0 left-0 right-0 z-50 border-b border-hawk-border bg-hawk-bg backdrop-blur-sm">
       <div className="max-w-7xl mx-auto px-6">
         <div className="flex items-center justify-between h-14">
-          {/* Logo */}
+          
           <Link href="/" className="flex items-center gap-2 no-underline">
             <div className="w-7 h-7 rounded-none bg-hawk-green flex items-center justify-center">
               <Shield className="w-3.5 h-3.5 text-hawk-bg" />
@@ -31,7 +31,7 @@ export default function Navbar() {
             </span>
           </Link>
 
-          {/* Desktop nav */}
+          
           <nav className="hidden md:flex items-center gap-8">
             {NAV_LINKS.map((link) => (
               <a
@@ -46,7 +46,7 @@ export default function Navbar() {
             ))}
           </nav>
 
-          {/* CTA */}
+          
           <div className="flex items-center gap-3">
             <Link
               href="/"
@@ -55,7 +55,7 @@ export default function Navbar() {
               ▶ Analyze Email
             </Link>
 
-            {/* Mobile menu toggle */}
+            
             <button
               onClick={() => setOpen(!open)}
               className="md:hidden p-[0.4rem] bg-transparent border border-hawk-border rounded-none text-hawk-muted cursor-pointer"
@@ -67,7 +67,7 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Mobile drawer */}
+      
       {open && (
         <div className="border-t border-hawk-border bg-hawk-bg pt-4 px-6 pb-6">
           {NAV_LINKS.map((link) => (

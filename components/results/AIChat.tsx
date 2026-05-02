@@ -21,9 +21,7 @@ export default function AIChat({ data }: Props) {
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
-  const inputRef = useRef<HTMLTextAreaElement>(null);
-
-  // Build context string for AI
+  const inputRef = useRef<HTMLTextAreaElement>(null);
   const context = JSON.stringify({
     from: data.parsedHeader.from,
     subject: data.parsedHeader.subject,
@@ -49,9 +47,7 @@ export default function AIChat({ data }: Props) {
     const newMessages: ChatMessage[] = [...messages, { role: "user", content: userMsg }];
     setMessages(newMessages);
     setInput("");
-    setLoading(true);
-
-    // Assistant placeholder
+    setLoading(true);
     setMessages((prev) => [...prev, { role: "assistant", content: "" }]);
 
     try {
@@ -101,7 +97,7 @@ export default function AIChat({ data }: Props) {
 
   return (
     <div className="card-hawk overflow-hidden">
-      {/* Toggle header */}
+      
       <button
         onClick={() => setOpen(!open)}
         className="w-full flex items-center justify-between p-5 hover:bg-hawk-card-hover transition-colors"
@@ -126,7 +122,7 @@ export default function AIChat({ data }: Props) {
 
       {open && (
         <>
-          {/* Suggested questions */}
+          
           {messages.length === 0 && (
             <div className="px-5 pb-4">
               <p className="text-[10px] font-mono text-hawk-muted uppercase tracking-widest mb-2">Suggested Questions</p>
@@ -144,7 +140,7 @@ export default function AIChat({ data }: Props) {
             </div>
           )}
 
-          {/* Messages */}
+          
           {messages.length > 0 && (
             <div
               ref={scrollRef}
@@ -193,7 +189,7 @@ export default function AIChat({ data }: Props) {
             </div>
           )}
 
-          {/* Input area */}
+          
           <div className="p-4 border-t border-(--hawk-border) flex items-end gap-2">
             <textarea
               ref={inputRef}

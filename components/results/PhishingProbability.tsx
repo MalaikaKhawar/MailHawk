@@ -35,9 +35,7 @@ export default function PhishingProbability({ probability }: Props) {
       bar.style.width = `${pct}%`;
     }, 100);
     return () => clearTimeout(timer);
-  }, [pct]);
-
-  // Segment markers
+  }, [pct]);
   const markers = [
     { pos: 30, label: "30%" },
     { pos: 60, label: "60%" },
@@ -58,7 +56,7 @@ export default function PhishingProbability({ probability }: Props) {
           </span>
         </div>
 
-        {/* Big percentage */}
+        
         <div className="flex items-baseline gap-2 mb-8">
           <span
             className="text-6xl font-bold font-mono leading-none"
@@ -71,16 +69,16 @@ export default function PhishingProbability({ probability }: Props) {
       </div>
 
       <div>
-        {/* Progress bar */}
+        
         <div className="relative mb-3">
-          {/* Track */}
+          
           <div className="h-3 rounded-full overflow-hidden bg-hawk-card">
-            {/* Gradient zones background */}
+            
             <div
               className="absolute inset-0 h-3 rounded-full opacity-20"
               style={{ background: "linear-gradient(90deg, #00ff88 0%, #ffaa00 30%, #ff4444 60%)" }}
             />
-            {/* Active fill */}
+            
             <div
               ref={barRef}
               className="h-full rounded-full transition-all duration-1000 ease-out"
@@ -92,7 +90,7 @@ export default function PhishingProbability({ probability }: Props) {
             />
           </div>
 
-          {/* Markers */}
+          
           {markers.map((m) => (
             <div
               key={m.pos}
@@ -104,7 +102,7 @@ export default function PhishingProbability({ probability }: Props) {
           ))}
         </div>
 
-        {/* Scale */}
+        
         <div className="flex justify-between text-[10px] font-mono text-hawk-muted mb-4">
           <span className="text-hawk-green">0% Safe</span>
           <span className="text-[#ffaa00]">30% Caution</span>

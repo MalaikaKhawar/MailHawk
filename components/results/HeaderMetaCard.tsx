@@ -52,7 +52,7 @@ export default function HeaderMetaCard({ header }: Props) {
         ))}
       </div>
 
-      {/* Extra headers */}
+      
       <div className="mt-5 pt-4 border-t border-(--hawk-border)">
         <p className="text-[9px] font-mono text-hawk-muted/80 uppercase tracking-widest mb-3">Extended Headers</p>
         <div className="grid grid-cols-1 gap-2">

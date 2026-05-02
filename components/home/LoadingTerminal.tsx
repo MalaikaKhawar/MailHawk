@@ -45,7 +45,7 @@ export default function LoadingTerminal() {
 
   return (
     <div className="terminal-container p-5 space-y-4">
-      {/* Terminal header */}
+      
       <div className="flex items-center gap-2 pb-3 border-b border-hawk-border">
         <div className="flex gap-1.5">
           <div className="w-3 h-3 rounded-full bg-hawk-danger/50" />
@@ -55,7 +55,7 @@ export default function LoadingTerminal() {
         <span className="text-xs font-mono text-[#444455] ml-2">mailhawk — forensic-engine</span>
       </div>
 
-      {/* Steps */}
+      
       <div className="space-y-2 min-h-50">
         {STEPS.map((step, i) => {
           const state = stepStates[i];
@@ -97,7 +97,7 @@ export default function LoadingTerminal() {
         })}
       </div>
 
-      {/* Progress bar */}
+      
       <div className="space-y-2 pt-2">
         <div className="flex justify-between text-xs font-mono text-[#444455]">
           <span>Analysis progress</span>

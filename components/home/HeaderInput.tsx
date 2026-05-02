@@ -79,20 +79,20 @@ export default function HeaderInput({ value, onChange }: Props) {
               spellCheck={false}
               className="input-hawk w-full resize-none p-4 text-sm leading-relaxed placeholder-hawk-border-hover focus:outline-none mb-4 font-mono"
             />
-            {/* Char count */}
+            
             <div className="absolute bottom-3 right-3 text-[10px] font-mono text-[#444455]">
               {value.length.toLocaleString()} / {CHAR_LIMIT.toLocaleString()}
             </div>
           </div>
 
-          {/* Error */}
+          
           {error && (
             <p className="text-sm text-[#ff4444] font-mono flex items-center gap-1.5">
               <span>✗</span> {error}
             </p>
           )}
 
-          {/* Actions */}
+          
           <div className="flex items-center justify-between gap-3">
             <button
               onClick={() => onChange("")}

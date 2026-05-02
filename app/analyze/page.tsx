@@ -2,9 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import type { AnalysisResult } from "@/types";
-
-// Components
+import type { AnalysisResult } from "@/types";
 import Navbar from "@/components/shared/Navbar";
 import Footer from "@/components/shared/Footer";
 import VerdictBanner from "@/components/results/VerdictBanner";
@@ -19,9 +17,7 @@ import IPReputationCard from "@/components/results/IPReputationCard";
 import LinkAnalysisCard from "@/components/results/LinkAnalysisCard";
 import AIVerdictCard from "@/components/results/AIVerdictCard";
 import AIChat from "@/components/results/AIChat";
-import DownloadReport from "@/components/results/DownloadReport";
-
-// Dynamic imports for browser-only map
+import DownloadReport from "@/components/results/DownloadReport";
 import dynamic from "next/dynamic";
 const RelayMap = dynamic(() => import("@/components/results/RelayMap"), { ssr: false });
 
@@ -59,7 +55,7 @@ export default function AnalyzePage() {
         <VerdictBanner data={data} />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          {/* Top row: Risk gauge, Phishing, Download */}
+          
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
             <div className="lg:col-span-1"><RiskGauge score={sd.riskScore} /></div>
             <div className="lg:col-span-1"><PhishingProbability probability={ai?.phishingProbability ?? sd.phishingProbability} /></div>
@@ -67,16 +63,16 @@ export default function AnalyzePage() {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Left column */}
+            
             <div className="lg:col-span-2 space-y-8">
-              {/* AI Analysis */}
+              
               {ai && (
                 <section>
                   <AIVerdictCard verdict={ai} />
                 </section>
               )}
 
-              {/* Email Authentication */}
+              
               <section>
                 <h2 className="text-xl font-mono font-bold text-white mb-4 flex items-center gap-2">
                   <span className="text-hawk-green">▸</span> Email Authentication
@@ -90,7 +86,7 @@ export default function AnalyzePage() {
                 </div>
               </section>
 
-              {/* Relay Infrastructure */}
+              
               <section>
                 <h2 className="text-xl font-mono font-bold text-white mb-4 flex items-center gap-2">
                   <span className="text-hawk-green">▸</span> Routing Infrastructure
@@ -102,18 +98,18 @@ export default function AnalyzePage() {
               </section>
             </div>
 
-            {/* Right column */}
+            
             <div className="space-y-8">
-              {/* Ask MailHawk AI */}
+              
               {ai && <AIChat data={data} />}
 
-              {/* Metadata */}
+              
               <HeaderMetaCard header={ph} />
 
-              {/* Links */}
+              
               <LinkAnalysisCard links={linkResults} />
 
-              {/* Host / IPs */}
+              
               <IPReputationCard ipResults={ipResults} />
             </div>
           </div>

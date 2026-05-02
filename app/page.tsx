@@ -53,10 +53,10 @@ export default function HomePage() {
           <InputTabs />
         </HeroSection>
 
-        {/* ── Features ─────────────────────────────────────────────── */}
+        
         <section id="features" className="bg-hawk-bg-alt py-24 px-6">
           <div className="max-w-275 mx-auto">
-            {/* Section label */}
+            
             <div className="text-center mb-14">
               <p className="font-mono text-[0.68rem] tracking-[0.14em] uppercase text-hawk-green mb-[0.85rem]">
                 — What MailHawk Does
@@ -70,7 +70,7 @@ export default function HomePage() {
               </p>
             </div>
 
-            {/* Grid */}
+            
             <div className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-px bg-hawk-border border border-hawk-border rounded-none overflow-hidden">
               {FEATURES.map((f) => (
                 <div
@@ -90,7 +90,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ── How it works ─────────────────────────────────────────── */}
+        
         <section id="how-it-works" className="bg-hawk-bg py-24 px-6">
           <div className="max-w-225 mx-auto">
             <div className="text-center mb-14">

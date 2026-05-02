@@ -16,11 +16,9 @@ function getLabel(score: number) {
   if (score <= 30) return "LOW RISK";
   if (score <= 60) return "MODERATE";
   return "HIGH RISK";
-}
-
-// Needle custom shape
+}
 function Needle({ cx, cy, score }: { cx: number; cy: number; score: number }) {
-  const angle = (score / 100) * 180 - 180; // -180 (left) to 0 (right)
+  const angle = (score / 100) * 180 - 180;
   const radian = (angle * Math.PI) / 180;
   const len = 62;
   const x2 = cx + len * Math.cos(radian);
@@ -37,9 +35,7 @@ function Needle({ cx, cy, score }: { cx: number; cy: number; score: number }) {
 export default function RiskGauge({ score }: Props) {
   const clampedScore = Math.min(100, Math.max(0, score));
   const color = getColor(clampedScore);
-  const label = getLabel(clampedScore);
-
-  // Gauge: 3 arcs (green 0-30, yellow 31-60, red 61-100)
+  const label = getLabel(clampedScore);
   const data = [
     { value: 30, color: "var(--color-hawk-green)" },
     { value: 30, color: "#ffaa00" },
@@ -61,7 +57,7 @@ export default function RiskGauge({ score }: Props) {
       <div className="relative w-full" style={{ height: 160 }}>
         <ResponsiveContainer width="100%" height={160}>
           <PieChart>
-            {/* Background arc */}
+            
             <Pie
               data={[{ value: 100 }]}
               cx="50%"
@@ -75,7 +71,7 @@ export default function RiskGauge({ score }: Props) {
             >
               <Cell fill="var(--hawk-border)" />
             </Pie>
-            {/* Colored zones */}
+            
             <Pie
               data={data}
               cx="50%"
@@ -92,7 +88,7 @@ export default function RiskGauge({ score }: Props) {
                 <Cell key={i} fill={`${entry.color}60`} />
               ))}
             </Pie>
-            {/* Active score arc */}
+            
             <Pie
               data={[
                 { value: clampedScore },
@@ -113,7 +109,7 @@ export default function RiskGauge({ score }: Props) {
           </PieChart>
         </ResponsiveContainer>
 
-        {/* Center number */}
+        
         <div className="absolute inset-0 flex flex-col items-center justify-end pb-4 pointer-events-none">
           <span
             className="text-5xl font-bold font-mono leading-none"
@@ -125,7 +121,7 @@ export default function RiskGauge({ score }: Props) {
         </div>
       </div>
 
-      {/* Scale labels */}
+      
       <div className="flex justify-between w-full mt-1 px-2">
         <span className="text-[10px] font-mono text-hawk-green">0 SAFE</span>
         <span className="text-[10px] font-mono text-hawk-warning">30–60</span>

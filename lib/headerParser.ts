@@ -1,6 +1,4 @@
-import type { ParsedHeader, RelayHop, AuthResults, DKIMSignature } from "@/types";
-
-// ─── Helpers ─────────────────────────────────────────────────────────────────
+import type { ParsedHeader, RelayHop, AuthResults, DKIMSignature } from "@/types";
 
 const PRIVATE_RANGES = [
   /^10\.\d+\.\d+\.\d+$/,
@@ -15,25 +13,21 @@ function isPrivateIp(ip: string): boolean {
   return PRIVATE_RANGES.some((r) => r.test(ip));
 }
 
-function extractIpFromText(text: string): string {
-  // IPv4
+function extractIpFromText(text: string): string {
   const ipv4 = text.match(/\b(\d{1,3}\.){3}\d{1,3}\b/);
-  if (ipv4) return ipv4[0];
-  // IPv6 in brackets
+  if (ipv4) return ipv4[0];
   const ipv6 = text.match(/\[([0-9a-fA-F:]+)\]/);
   if (ipv6) return ipv6[1];
   return "";
 }
 
-function extractEmail(raw: string): { name: string; email: string; domain: string } {
-  // "Display Name <email@domain.com>"
+function extractEmail(raw: string): { name: string; email: string; domain: string } {
   const nameEmail = raw.match(/^"?([^"<]*)"?\s*<([^>]+)>/);
   if (nameEmail) {
     const email = nameEmail[2].trim().toLowerCase();
     const domain = email.split("@")[1] || "";
     return { name: nameEmail[1].trim(), email, domain };
-  }
-  // bare email
+  }
   const bare = raw.match(/([^\s<>]+@[^\s<>]+)/);
   if (bare) {
     const email = bare[1].trim().toLowerCase();
@@ -50,16 +44,11 @@ function getHeaderValue(headers: Map<string, string[]>, key: string): string {
 
 function getAllHeaderValues(headers: Map<string, string[]>, key: string): string[] {
   return headers.get(key.toLowerCase()) || [];
-}
+}
 
-// ─── Header Unfolding ─────────────────────────────────────────────────────────
-
-function unfoldHeader(raw: string): string {
-  // RFC 2822 unfolding: CRLF followed by whitespace → single space
+function unfoldHeader(raw: string): string {
   return raw.replace(/\r?\n[ \t]+/g, " ");
-}
-
-// ─── Parse All Headers into a Map ────────────────────────────────────────────
+}
 
 function parseHeaderMap(raw: string): Map<string, string[]> {
   const unfolded = unfoldHeader(raw);
@@ -75,38 +64,24 @@ function parseHeaderMap(raw: string): Map<string, string[]> {
     map.get(key)!.push(value);
   }
   return map;
-}
-
-// ─── Parse Received Headers (Relay Hops) ─────────────────────────────────────
+}
 
 function parseRelayHops(headers: Map<string, string[]>): RelayHop[] {
   const receivedHeaders = getAllHeaderValues(headers, "received");
-  const hops: RelayHop[] = [];
-
-  // Received headers are in reverse order (latest first)
+  const hops: RelayHop[] = [];
   const reversed = [...receivedHeaders].reverse();
 
   let prevTimestamp: Date | null = null;
 
   for (let i = 0; i < reversed.length; i++) {
-    const text = reversed[i];
-
-    // from
+    const text = reversed[i];
     const fromMatch = text.match(/from\s+([^\s]+)/i);
-    const from = fromMatch ? fromMatch[1] : "";
-
-    // by
+    const from = fromMatch ? fromMatch[1] : "";
     const byMatch = text.match(/by\s+([^\s]+)/i);
-    const by = byMatch ? byMatch[1] : "";
-
-    // protocol
+    const by = byMatch ? byMatch[1] : "";
     const protoMatch = text.match(/with\s+([A-Z0-9]+)/i);
-    const protocol = protoMatch ? protoMatch[1].toUpperCase() : "SMTP";
-
-    // IP in parentheses or brackets around "from"
-    const ipRaw = extractIpFromText(text);
-
-    // timestamp after semicolon
+    const protocol = protoMatch ? protoMatch[1].toUpperCase() : "SMTP";
+    const ipRaw = extractIpFromText(text);
     const semiIdx = text.lastIndexOf(";");
     let timestamp: Date = new Date();
     if (semiIdx !== -1) {
@@ -134,10 +109,7 @@ function parseRelayHops(headers: Map<string, string[]>): RelayHop[] {
   }
 
   return hops;
-}
-
-// ─── Parse Authentication-Results (single header value) ─────────────────────
-// Used to populate the legacy authResults field (spoof detection etc.)
+}
 
 function parseAuthResults(raw: string): AuthResults {
   const defaults: AuthResults = {
@@ -149,42 +121,31 @@ function parseAuthResults(raw: string): AuthResults {
     dkimSelector: "",
   };
 
-  if (!raw) return defaults;
-
-  // SPF
+  if (!raw) return defaults;
   const spfMatch = raw.match(/spf=(pass|fail|softfail|neutral|none|permerror|temperror)/i);
   if (spfMatch) {
     const val = spfMatch[1].toLowerCase();
     if (["pass", "fail", "softfail", "neutral", "none"].includes(val)) {
       defaults.spf = val as AuthResults["spf"];
     }
-  }
-
-  // DKIM
+  }
   const dkimMatch = raw.match(/dkim=(pass|fail|none|neutral|permerror|temperror)/i);
   if (dkimMatch) {
     const val = dkimMatch[1].toLowerCase();
     if (["pass", "fail", "none"].includes(val)) {
       defaults.dkim = val as AuthResults["dkim"];
     }
-  }
-
-  // DMARC
+  }
   const dmarcMatch = raw.match(/dmarc=(pass|fail|none|bestguesspass|permerror|temperror)/i);
   if (dmarcMatch) {
     const val = dmarcMatch[1].toLowerCase();
     if (["pass", "fail", "none"].includes(val)) {
       defaults.dmarc = val as AuthResults["dmarc"];
     }
-  }
-
-  // SPF domain
+  }
   const spfDomainMatch = raw.match(/smtp\.mailfrom[= ]+([^\s;,]+)/i)
     || raw.match(/smtp\.helo[= ]+([^\s;,]+)/i);
-  if (spfDomainMatch) defaults.spfDomain = spfDomainMatch[1].replace(/[<>]/g, "");
-
-  // DKIM domain + selector
-  // Handles: header.d=domain.com, header.i=@domain.com
+  if (spfDomainMatch) defaults.spfDomain = spfDomainMatch[1].replace(/[<>]/g, "");
   const dkimDomainMatch = raw.match(/header\.d[= ]+([^\s;,]+)/i)
     || raw.match(/header\.i[= ]+@?([^\s;,]+)/i);
   if (dkimDomainMatch) defaults.dkimDomain = dkimDomainMatch[1].replace(/^@/, "");
@@ -193,12 +154,7 @@ function parseAuthResults(raw: string): AuthResults {
   if (dkimSelectorMatch) defaults.dkimSelector = dkimSelectorMatch[1];
 
   return defaults;
-}
-
-// ─── Parse ALL Authentication-Results headers ─────────────────────────────────
-// Collects every Authentication-Results header in the raw email (there can be
-// multiple — one per receiving mail server). Picks the most informative one
-// (the one with the most fields filled) and returns structured results.
+}
 
 function parseAllAuthResults(rawHeader: string): ParsedHeader["headerAuthResults"] {
   const result: ParsedHeader["headerAuthResults"] = {
@@ -208,10 +164,7 @@ function parseAllAuthResults(rawHeader: string): ParsedHeader["headerAuthResults
     dkimSelector: "",
     dkimDomain: "",
     spfDomain: "",
-  };
-
-  // Collect all Authentication-Results header values by unfolding them first.
-  // The raw header may have CRLF-folded lines — unfold before splitting.
+  };
   const unfolded = rawHeader.replace(/\r?\n[ \t]+/g, " ");
   const lines = unfolded.split(/\r?\n/);
 
@@ -222,68 +175,50 @@ function parseAllAuthResults(rawHeader: string): ParsedHeader["headerAuthResults
     }
   }
 
-  if (authHeaders.length === 0) return result;
-
-  // Score each header by how many auth results it contains
+  if (authHeaders.length === 0) return result;
   const scored = authHeaders.map((h) => {
     const lower = h.toLowerCase();
     let score = 0;
     if (/spf=(pass|fail|softfail|neutral)/.test(lower))   score++;
     if (/dkim=(pass|fail)/.test(lower))                   score++;
     if (/dmarc=(pass|fail)/.test(lower))                  score++;
-    if (/header\.s=/.test(lower))                         score++; // has selector
+    if (/header\.s=/.test(lower))                         score++;
     return { h, score };
-  });
-
-  // Pick the highest-scoring header; prefer later ones (inner mail servers) on tie
+  });
   scored.sort((a, b) => b.score - a.score);
-  const best = scored[0].h;
-
-  // SPF
+  const best = scored[0].h;
   const spfMatch = best.match(/spf=(pass|fail|softfail|neutral|none|permerror|temperror)/i);
   if (spfMatch) {
     const v = spfMatch[1].toLowerCase();
     if (["pass", "fail", "softfail", "neutral", "none"].includes(v)) {
       result.spf = v as ParsedHeader["headerAuthResults"]["spf"];
     }
-  }
-
-  // DKIM
+  }
   const dkimMatch = best.match(/dkim=(pass|fail|none|neutral|permerror|temperror)/i);
   if (dkimMatch) {
     const v = dkimMatch[1].toLowerCase();
     if (["pass", "fail", "none"].includes(v)) {
       result.dkim = v as ParsedHeader["headerAuthResults"]["dkim"];
     }
-  }
-
-  // DMARC
+  }
   const dmarcMatch = best.match(/dmarc=(pass|fail|none|bestguesspass|permerror|temperror)/i);
   if (dmarcMatch) {
     const v = dmarcMatch[1].toLowerCase();
     if (["pass", "fail", "none"].includes(v)) {
       result.dmarc = v as ParsedHeader["headerAuthResults"]["dmarc"];
     }
-  }
-
-  // SPF domain
+  }
   const spfDomain = best.match(/smtp\.mailfrom[= ]+([^\s;,]+)/i)
     || best.match(/smtp\.helo[= ]+([^\s;,]+)/i);
-  if (spfDomain) result.spfDomain = spfDomain[1].replace(/[<>]/g, "").split("@").pop() || "";
-
-  // DKIM domain — handles header.d= and header.i=@domain
+  if (spfDomain) result.spfDomain = spfDomain[1].replace(/[<>]/g, "").split("@").pop() || "";
   const dkimDomain = best.match(/header\.d[= ]+([^\s;,]+)/i)
     || best.match(/header\.i[= ]+@?([^\s;,]+)/i);
-  if (dkimDomain) result.dkimDomain = dkimDomain[1].replace(/^@/, "");
-
-  // DKIM selector
+  if (dkimDomain) result.dkimDomain = dkimDomain[1].replace(/^@/, "");
   const dkimSel = best.match(/header\.s[= ]+([^\s;,]+)/i);
   if (dkimSel) result.dkimSelector = dkimSel[1];
 
   return result;
-}
-
-// ─── Parse DKIM-Signature ─────────────────────────────────────────────────────
+}
 
 function parseDkimSignature(raw: string): DKIMSignature {
   const defaults: DKIMSignature = {
@@ -313,33 +248,22 @@ function parseDkimSignature(raw: string): DKIMSignature {
     signedHeaders,
     bodyHash: get("bh"),
   };
-}
-
-// ─── Main Parser ──────────────────────────────────────────────────────────────
+}
 
 export function parseHeader(rawHeader: string): ParsedHeader {
   const headers = parseHeaderMap(rawHeader);
 
   const fromRaw = getHeaderValue(headers, "from");
-  const from = extractEmail(fromRaw);
-
-  // Layer 1: parse ALL Authentication-Results headers for the primary truth
-  const headerAuthResults = parseAllAuthResults(rawHeader);
-
-  // Also populate the legacy authResults from the first Authentication-Results header
-  // (used by spoof detector and other legacy callers)
+  const from = extractEmail(fromRaw);
+  const headerAuthResults = parseAllAuthResults(rawHeader);
   const authResultsRaw = getHeaderValue(headers, "authentication-results");
-  const authResults = parseAuthResults(authResultsRaw);
-
-  // Merge selector/domain from the richer multi-header parse into legacy authResults
+  const authResults = parseAuthResults(authResultsRaw);
   if (!authResults.dkimSelector && headerAuthResults.dkimSelector) {
     authResults.dkimSelector = headerAuthResults.dkimSelector;
   }
   if (!authResults.dkimDomain && headerAuthResults.dkimDomain) {
     authResults.dkimDomain = headerAuthResults.dkimDomain;
-  }
-
-  // Fallback: get DKIM domain/selector from DKIM-Signature header
+  }
   const dkimSigRaw = getHeaderValue(headers, "dkim-signature");
   const dkimSignature = parseDkimSignature(dkimSigRaw);
 
@@ -348,8 +272,7 @@ export function parseHeader(rawHeader: string): ParsedHeader {
   }
   if (!authResults.dkimSelector && dkimSignature.selector) {
     authResults.dkimSelector = dkimSignature.selector;
-  }
-  // Also propagate fallback into headerAuthResults
+  }
   if (!headerAuthResults.dkimSelector && dkimSignature.selector) {
     headerAuthResults.dkimSelector = dkimSignature.selector;
   }
@@ -360,13 +283,9 @@ export function parseHeader(rawHeader: string): ParsedHeader {
   const relayHops = parseRelayHops(headers);
 
   const xSpamScoreRaw = getHeaderValue(headers, "x-spam-score");
-  const xSpamScore = parseFloat(xSpamScoreRaw) || 0;
-
-  // Extract Return-Path address
+  const xSpamScore = parseFloat(xSpamScoreRaw) || 0;
   const returnPathRaw = getHeaderValue(headers, "return-path");
-  const returnPath = returnPathRaw.replace(/[<>]/g, "").trim();
-
-  // Extract Reply-To address
+  const returnPath = returnPathRaw.replace(/[<>]/g, "").trim();
   const replyToRaw = getHeaderValue(headers, "reply-to");
   const replyToEmail = extractEmail(replyToRaw);
 

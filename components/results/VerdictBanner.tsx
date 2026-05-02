@@ -118,9 +118,9 @@ export default function VerdictBanner({ data }: Props) {
   return (
     <div className={`w-full border-b ${c.border} ${c.bg} ${c.glow}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* ═══ Row 1: Verdict + All Stats ════════════════════════════════════ */}
+        
         <div className="flex flex-col lg:flex-row items-start lg:items-stretch py-6 gap-4 lg:gap-0">
-          {/* LEFT — Verdict identity */}
+          
           <div className="flex items-start gap-4 flex-1 lg:pr-8 lg:border-r lg:border-white/6">
             <div
               className="w-12 h-12 shrink-0 border flex items-center justify-center mt-0.5"
@@ -152,9 +152,9 @@ export default function VerdictBanner({ data }: Props) {
             </div>
           </div>
 
-          {/* RIGHT — Stat boxes */}
+          
           <div className="flex items-stretch mt-0 lg:ml-0 flex-wrap lg:flex-nowrap">
-            {/* ① Trust Score — primary new metric */}
+            
             {trust && (
               <StatBox
                 label=""
@@ -164,14 +164,14 @@ export default function VerdictBanner({ data }: Props) {
               />
             )}
 
-            {/* ② Risk Score */}
+            
             <StatBox
               label="Risk Score"
               value={`${riskScore}/100`}
               color={scoreColor(100 - riskScore)}
             />
 
-            {/* ③ Phishing Probability */}
+            
             <StatBox
               label="Phishing"
               value={`${phishing}%`}
@@ -184,7 +184,7 @@ export default function VerdictBanner({ data }: Props) {
               }
             />
 
-            {/* ④ Checks Passed */}
+            
             <StatBox
               label="Checks Passed"
               value={`${passedChecks}/${totalChecks}`}
@@ -197,7 +197,7 @@ export default function VerdictBanner({ data }: Props) {
               }
             />
 
-            {/* ⑤ AI Confidence */}
+            
             {data.aiVerdict && (
               <StatBox
                 label="AI Confidence"
@@ -208,7 +208,7 @@ export default function VerdictBanner({ data }: Props) {
           </div>
         </div>
 
-        {/* ═══ Row 2: Factor breakdown strip ════════════════════════════════ */}
+        
         {trust && trust.factors.length > 0 && (
           <div className="border-t border-white/6 py-3 flex flex-wrap items-center">
             {trust.factors.map((f, i) => (
@@ -239,7 +239,7 @@ export default function VerdictBanner({ data }: Props) {
           </div>
         )}
 
-        {/* ═══ Row 3: Meta info ══════════════════════════════════════════════ */}
+        
         <div className="border-t border-white/6 py-2.5 flex flex-wrap items-center gap-4 text-[11px] font-mono text-hawk-muted">
           <span className="flex items-center gap-1.5">
             <Clock className="w-3 h-3 opacity-50" />

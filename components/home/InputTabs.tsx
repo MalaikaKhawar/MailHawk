@@ -10,7 +10,7 @@ export default function InputTabs() {
 
   return (
     <div className="w-full max-w-175 mx-auto">
-      {/* Tab switcher — matches inspiration's button row */}
+      
       <div className="flex gap-2 justify-center mb-4">
         {(["upload", "paste"] as const).map((tab) => (
           <button
@@ -27,7 +27,7 @@ export default function InputTabs() {
         ))}
       </div>
 
-      {/* Panel */}
+      
       <div className="bg-hawk-card border border-hawk-border rounded-none p-5">
         {active === "paste" ? (
           <>

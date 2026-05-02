@@ -36,7 +36,7 @@ export default function SPFCard({ spf, fromResult }: Props) {
 
   return (
     <div className="card-hawk p-5 h-full flex flex-col">
-      {/* Header */}
+      
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <div className="w-7 h-7 rounded-none bg-blue-500/10 border border-blue-500/20 flex items-center justify-center">
@@ -54,16 +54,16 @@ export default function SPFCard({ spf, fromResult }: Props) {
         </span>
       </div>
 
-      {/* Trustability */}
+      
       <div className="flex items-center gap-2 mb-3">
         <div className="w-2 h-2 rounded-full" style={{ backgroundColor: tc.color }} />
         <span className="text-xs font-mono" style={{ color: tc.color }}>{tc.label}</span>
       </div>
 
-      {/* Explanation */}
+      
       <p className="text-sm text-hawk-muted leading-relaxed mb-4">{spf.explanation}</p>
 
-      {/* Expand */}
+      
       <button
         onClick={() => setExpanded(!expanded)}
         className="flex items-center gap-1 text-xs font-mono text-hawk-muted hover:text-hawk-muted transition-colors mt-auto"

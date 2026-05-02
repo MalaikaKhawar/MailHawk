@@ -23,8 +23,7 @@ export default function FileUpload({ onHeaderExtracted }: Props) {
 
       const reader = new FileReader();
       reader.onload = (e) => {
-        const raw = e.target?.result as string;
-        // Extract just the header portion (before first blank line)
+        const raw = e.target?.result as string;
         const blankLine = raw.indexOf("\n\n");
         const header = blankLine !== -1 ? raw.slice(0, blankLine) : raw;
         setFilename(file.name);
@@ -50,10 +49,7 @@ export default function FileUpload({ onHeaderExtracted }: Props) {
           setStatus("error");
           setErrorMsg("File is too large. Please upload an email under 5 MB.");
           return;
-        }
-        
-        // Even if dropzone rejects it for other reasons (like mime type), 
-        // our manual check in processFile will handle it properly.
+        }
         const file = rejection.file;
         if (file) processFile(file);
       }
@@ -62,11 +58,9 @@ export default function FileUpload({ onHeaderExtracted }: Props) {
   );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    onDrop,
-    // Note: Leaving 'accept' undefined heavily optimizes for Windows drag-and-drop 
-    // where Mail files often don't have predefined MIME types, allowing our manual check to run.
+    onDrop,
     maxFiles: 1,
-    maxSize: 5 * 1024 * 1024, // 5 MB
+    maxSize: 5 * 1024 * 1024,
   });
 
   return (

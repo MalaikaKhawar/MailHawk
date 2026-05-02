@@ -56,7 +56,7 @@ export default function DKIMCard({ dkim, fromResult, domain, selector, algorithm
         </div>
       </div>
 
-      {/* Info rows */}
+      
       <div className="space-y-2 mb-4">
         {[
           ["Signing Domain", domain || "—"],

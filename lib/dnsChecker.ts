@@ -1,27 +1,15 @@
-// ─── DNS Checker ──────────────────────────────────────────────────────────────
-// Strategy:
-//   Layer 1 (PRIMARY):   Authentication-Results header from email → actual pass/fail
-//   Layer 2 (SECONDARY): Node.js `dns/promises` built-in → published DNS policy records
-//
-// NEVER uses fetch() to external DNS APIs. dns/promises uses the system resolver
-// and works in all Next.js environments including Vercel and proxied servers.
+
 
 import dns from "dns/promises";
-import type { DnsResults } from "@/types";
-
-// ─── Helpers ──────────────────────────────────────────────────────────────────
+import type { DnsResults } from "@/types";
 
 /** Resolve TXT records using the Node.js built-in DNS resolver.
  *  Returns flat strings — inner chunk arrays are joined per RFC 7208. */
 async function resolveTxt(name: string): Promise<string[]> {
   try {
-    const records = await dns.resolveTxt(name);
-    // Each record is string[] chunks (split at 255-byte boundaries) — join them
+    const records = await dns.resolveTxt(name);
     return records.map((chunks) => chunks.join(""));
-  } catch {
-    // ENODATA = domain exists but no TXT records
-    // ENOTFOUND = domain doesn't exist
-    // ECONNREFUSED / ETIMEOUT = resolver unavailable
+  } catch {
     return [];
   }
 }
@@ -35,9 +23,7 @@ async function resolveMx(name: string): Promise<string[]> {
   } catch {
     return [];
   }
-}
-
-// ─── SPF Check ────────────────────────────────────────────────────────────────
+}
 
 async function checkSpf(
   domain: string,
@@ -47,8 +33,7 @@ async function checkSpf(
     const records = await resolveTxt(domain);
     const spfRecord = records.find((r) => r.startsWith("v=spf1"));
 
-    if (!spfRecord) {
-      // Trust the header result even if no DNS record is visible
+    if (!spfRecord) {
       const result = (headerResult as DnsResults["spf"]["result"]) || "none";
       return {
         record: null,
@@ -61,21 +46,15 @@ async function checkSpf(
       };
     }
 
-    const mechanisms = spfRecord.split(/\s+/).slice(1); // skip "v=spf1"
-    const allMech = mechanisms.find((m) => /all$/.test(m));
-
-    // Determine published policy trustability
+    const mechanisms = spfRecord.split(/\s+/).slice(1);
+    const allMech = mechanisms.find((m) => /all$/.test(m));
     let publishedTrust: DnsResults["spf"]["trustability"] = "LOW";
     if (allMech?.startsWith("-"))      publishedTrust = "HIGH";
     else if (allMech?.startsWith("~")) publishedTrust = "MEDIUM";
     else if (allMech?.startsWith("?")) publishedTrust = "LOW";
-    else if (allMech?.startsWith("+")) publishedTrust = "NONE"; // +all = allow anyone
-
-    // Layer 1 (header) takes priority for the result value
+    else if (allMech?.startsWith("+")) publishedTrust = "NONE";
     const result: DnsResults["spf"]["result"] =
-      (headerResult as DnsResults["spf"]["result"]) || "none";
-
-    // Map header result to trustability if header takes priority
+      (headerResult as DnsResults["spf"]["result"]) || "none";
     const trustability: DnsResults["spf"]["trustability"] =
       headerResult === "pass"     ? publishedTrust :
       headerResult === "fail"     ? "NONE" :
@@ -116,9 +95,7 @@ function buildSpfExplanation(result: string, domain: string): string {
     default:
       return `No SPF result available for ${domain}. Cannot determine sender authorization.`;
   }
-}
-
-// ─── DMARC Check ──────────────────────────────────────────────────────────────
+}
 
 async function checkDmarc(
   domain: string,
@@ -151,7 +128,7 @@ async function checkDmarc(
     };
 
     const policyRaw = get("p") as "none" | "quarantine" | "reject" | null;
-    const adkim = get("adkim") || "r";   // r=relaxed, s=strict
+    const adkim = get("adkim") || "r";
     const aspf  = get("aspf")  || "r";
     const pct   = parseInt(get("pct")) || 100;
     const reportingConfigured = !!get("rua");
@@ -168,9 +145,7 @@ async function checkDmarc(
     } else if (policyRaw === "none") {
       trustabilityScore = 20;
       trustability = "LOW";
-    }
-
-    // Layer 1 header takes priority for actual result
+    }
     const result = headerResult || (policyRaw ? "pass" : "none");
 
     return {
@@ -214,16 +189,13 @@ function buildDmarcExplanation(
   if (result === "fail")
     return `DMARC failed. The email does not align with ${domain}'s published policy.`;
   return `DMARC result unavailable for ${domain}.`;
-}
-
-// ─── DKIM Check ───────────────────────────────────────────────────────────────
+}
 
 async function checkDkim(
   domain: string,
   selector: string,
   headerResult?: string   // value from Authentication-Results header
-): Promise<DnsResults["dkim"]> {
-  // Without selector we cannot do DNS lookup, but header result is still valid
+): Promise<DnsResults["dkim"]> {
   if (!selector || !domain) {
     return {
       record: null,
@@ -244,8 +216,7 @@ async function checkDkim(
       (r) => r.includes("v=DKIM1") || r.includes("p=")
     );
 
-    if (!dkimRecord) {
-      // DNS returned nothing — trust the header result
+    if (!dkimRecord) {
       return {
         record: null,
         keyExists: headerResult === "pass",
@@ -269,8 +240,7 @@ async function checkDkim(
         ? `DKIM key has been revoked at ${dkimHost} (empty p= field).`
         : `DKIM public key verified at ${dkimHost}.`,
     };
-  } catch {
-    // DNS failed — fall back to header result
+  } catch {
     return {
       record: null,
       keyExists: headerResult === "pass",
@@ -281,16 +251,12 @@ async function checkDkim(
         : "DKIM DNS lookup failed and no result found in email header.",
     };
   }
-}
-
-// ─── MX Check ─────────────────────────────────────────────────────────────────
+}
 
 async function checkMx(domain: string): Promise<DnsResults["mx"]> {
   const records = await resolveMx(domain);
   return { records, hasMx: records.length > 0 };
-}
-
-// ─── Main Export ──────────────────────────────────────────────────────────────
+}
 
 /**
  * Check DNS records for a domain and combine with header auth results.
@@ -303,9 +269,9 @@ export async function checkDns(
   domain: string,
   dkimSelector: string,
   headerAuth?: {
-    spf:   string;  // "pass" | "fail" | "softfail" | "neutral" | "none"
-    dkim:  string;  // "pass" | "fail" | "none"
-    dmarc: string;  // "pass" | "fail" | "none"
+    spf:   string;
+    dkim:  string;
+    dmarc: string;
   }
 ): Promise<DnsResults> {
   const [spf, dmarc, dkim, mx] = await Promise.all([

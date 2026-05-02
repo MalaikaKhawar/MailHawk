@@ -32,11 +32,10 @@ export async function POST(req: NextRequest) {
         returnPath: result.parsedHeader.returnPath || "",
         replyTo: result.parsedHeader.replyTo || "",
       },
-      rawEmailContent: rawHeader, // entire uploaded email text
-      fullAnalysisData: result,   // strictly structured nested JSON containing every single detail
+      rawEmailContent: rawHeader,
+      fullAnalysisData: result,
     };
 
-    // Store in Firebase Realtime Database with robust retry logic
     let retries = 3;
     let success = false;
 
@@ -54,14 +53,14 @@ export async function POST(req: NextRequest) {
         if (!fbRes.ok) {
           console.error("[/api/store] Firebase refused:", await fbRes.text());
         }
-        success = true; // Request completed, even if it was a 4xx/5xx from Firebase
+        success = true;
       } catch (err: any) {
         retries--;
         if (retries === 0) {
           console.error("[/api/store] Firebase completely failed after retries. Cause:", err.message);
-          throw err; // bubble up to outer catch block
+          throw err;
         } else {
-          // Exponential backoff wait (1s, 2s...)
+
           await new Promise((resolve) => setTimeout(resolve, (3 - retries) * 1000));
         }
       }

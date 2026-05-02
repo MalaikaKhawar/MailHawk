@@ -56,9 +56,9 @@ export default function RelayTimeline({ hops, ipResults }: Props) {
 
           return (
             <div key={hop.hopNumber} className="flex gap-4">
-              {/* Connector column */}
+              
               <div className="flex flex-col items-center shrink-0 w-10">
-                {/* Circle */}
+                
                 <div
                   className="w-8 h-8 rounded-full border-2 flex items-center justify-center shrink-0 z-10 font-mono font-bold text-xs"
                   style={{
@@ -70,7 +70,7 @@ export default function RelayTimeline({ hops, ipResults }: Props) {
                 >
                   {hop.hopNumber}
                 </div>
-                {/* Line */}
+                
                 {!isLast && (
                   <div
                     className="w-0.5 flex-1 my-1"
@@ -79,7 +79,7 @@ export default function RelayTimeline({ hops, ipResults }: Props) {
                 )}
               </div>
 
-              {/* Card */}
+              
               <div
                 className={`flex-1 mb-3 p-4 rounded-none border transition-colors ${
                   isAnomaly
@@ -88,7 +88,7 @@ export default function RelayTimeline({ hops, ipResults }: Props) {
                 }`}
                 style={{ borderColor: isAnomaly ? `${color}30` : undefined }}
               >
-                {/* Top row */}
+                
                 <div className="flex flex-wrap items-start justify-between gap-2 mb-3">
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-1.5 mb-0.5">
@@ -105,7 +105,7 @@ export default function RelayTimeline({ hops, ipResults }: Props) {
                   </div>
                 </div>
 
-                {/* Details row */}
+                
                 <div className="flex flex-wrap gap-3 text-[10px] font-mono">
                   {hop.ip && (
                     <span className="flex items-center gap-1" style={{ color }}>
@@ -132,7 +132,7 @@ export default function RelayTimeline({ hops, ipResults }: Props) {
                   )}
                 </div>
 
-                {/* IP badge */}
+                
                 {ip && (
                   <div className="mt-2 flex items-center gap-2">
                     <span
@@ -150,7 +150,7 @@ export default function RelayTimeline({ hops, ipResults }: Props) {
                   </div>
                 )}
 
-                {/* Timestamp */}
+                
                 <p className="text-[10px] font-mono text-hawk-border-hover mt-2">
                   {new Date(hop.timestamp).toUTCString()}
                 </p>

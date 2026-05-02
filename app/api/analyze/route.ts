@@ -16,20 +16,15 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Invalid or empty header provided." }, { status: 400 });
     }
 
-    // 1. Parse
     const parsedHeader = parseHeader(rawHeader.trim());
 
-    // 2. Spoof detection (sync)
     const spoofDetection = detectSpoof(parsedHeader);
 
-    // 3. Heuristic link pre-scan (sync, instant)
     const rawLinks = analyzeLinks(rawHeader, parsedHeader.fromDomain);
     const linkUrls = rawLinks.map((l) => l.url);
 
-    // 4. DNS + IPs + AI link analysis + AI forensic verdict — all parallel
     const [dnsResults, ipResults, aiLinkVerdicts, aiVerdict] = await Promise.all([
 
-      // DNS — Layer 1 from header auth results, Layer 2 from Node dns module
       checkDns(
         parsedHeader.fromDomain,
         parsedHeader.headerAuthResults.dkimSelector
@@ -47,13 +42,10 @@ export async function POST(req: NextRequest) {
         mx:    { records: [], hasMx: false },
       })),
 
-      // IP reputation
       checkIPs(parsedHeader.relayHops).catch(() => []),
 
-      // AI link analysis — one batch call for all URLs
       analyzeLinksWithAI(linkUrls, parsedHeader.fromDomain).catch(() => ({})),
 
-      // Full AI forensic verdict — fires in parallel, uses heuristic link results
       runAIAnalysis({
         parsedHeader,
         spoofDetection,
@@ -81,10 +73,8 @@ export async function POST(req: NextRequest) {
       })),
     ]);
 
-    // 5. Merge per-URL AI verdicts into final LinkResult[]
     const linkResults = mergeAILinkResults(rawLinks, aiLinkVerdicts);
 
-    // 6. Compute composite trust score (0–100%)
     const trustScore = computeTrustScore(dnsResults, ipResults, linkResults, spoofDetection, aiVerdict);
 
     const result: AnalysisResult = {
@@ -98,8 +88,7 @@ export async function POST(req: NextRequest) {
       analyzedAt: new Date().toISOString(),
     };
 
-    // Fire and forget storage quietly in the background
-    // Normal process returns instantly and doesn't wait for this to finish
+
     fetch(new URL("/api/store", req.url).toString(), {
       method: "POST",
       headers: { "Content-Type": "application/json" },

@@ -35,9 +35,7 @@ const FALLBACK_VERDICT: AIVerdict = {
 
 export async function runAIAnalysis(
   data: Omit<AnalysisResult, "aiVerdict" | "analyzedAt" | "trustScore">
-): Promise<AIVerdict> {
-
-  // Strip rawHeader from the payload to avoid token bloat (it can be huge)
+): Promise<AIVerdict> {
   const { parsedHeader, ...rest } = data;
   const { rawHeader: _raw, ...headerWithoutRaw } = parsedHeader;
   const trimmedData = { parsedHeader: headerWithoutRaw, ...rest };
@@ -76,15 +74,11 @@ ${JSON.stringify(trimmedData, null, 2)}`;
         { role: "user", content: userPrompt },
       ],
       temperature: 0.2,
-      max_tokens: 2000,
-      // Note: response_format omitted — not all Groq models support json_object mode reliably.
-      // The system prompt + user prompt explicitly instruct JSON-only output.
+      max_tokens: 2000,
     });
 
     const raw = completion.choices[0]?.message?.content || "";
-    if (!raw) throw new Error("Empty response from AI model");
-
-    // Extract JSON — handle cases where the model wraps output in markdown code fences
+    if (!raw) throw new Error("Empty response from AI model");
     const jsonMatch = raw.match(/```(?:json)?\s*([\s\S]*?)```/) || raw.match(/({[\s\S]*})/);
     const jsonStr = jsonMatch ? jsonMatch[1] || jsonMatch[0] : raw;
 
@@ -94,13 +88,11 @@ ${JSON.stringify(trimmedData, null, 2)}`;
     console.error("[runAIAnalysis] AI Analysis Error:", err instanceof Error ? err.message : err);
     return FALLBACK_VERDICT;
   }
-}
-
-// ─── AI Link Analysis ─────────────────────────────────────────────────────────
+}
 
 export interface AILinkVerdict {
-  score: number;   // 0–100 phishing probability
-  reason: string;  // one-sentence explanation
+  score: number;
+  reason: string;
   label: "SAFE" | "SUSPICIOUS" | "PHISHING";
 }
 

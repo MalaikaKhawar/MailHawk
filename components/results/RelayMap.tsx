@@ -5,9 +5,7 @@ import type { IPResult } from "@/types";
 
 interface Props {
   ipResults: IPResult[];
-}
-
-// This component is only ever loaded via dynamic import with ssr:false
+}
 export default function RelayMap({ ipResults }: Props) {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<unknown>(null);
@@ -15,25 +13,15 @@ export default function RelayMap({ ipResults }: Props) {
   useEffect(() => {
     if (!mapRef.current || ipResults.length === 0) return;
 
-    let cancelled = false;
-
-    // Dynamic imports to avoid SSR issues
-    import("leaflet").then((L) => {
-      // Bail if the effect was cleaned up while the import was in-flight
-      if (cancelled || !mapRef.current) return;
-
-      // Bail if another render already created the instance
-      if (mapInstanceRef.current) return;
-
-      // Safety: if a prior Leaflet instance is still attached to the DOM node
-      // (e.g. StrictMode cleanup didn't fully remove it), tear it down first
+    let cancelled = false;
+    import("leaflet").then((L) => {
+      if (cancelled || !mapRef.current) return;
+      if (mapInstanceRef.current) return;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       if ((mapRef.current as any)._leaflet_id) {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (window as any).L?.map(mapRef.current)?.remove?.();
-      }
-
-      // Fix default marker icon paths
+      }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       delete (L.Icon.Default.prototype as any)._getIconUrl;
       L.Icon.Default.mergeOptions({
@@ -43,39 +31,29 @@ export default function RelayMap({ ipResults }: Props) {
       });
 
       const validIps = ipResults.filter((ip) => ip.lat !== 0 || ip.lon !== 0);
-      if (validIps.length === 0 || !mapRef.current) return;
-
-      // Create map
+      if (validIps.length === 0 || !mapRef.current) return;
       const map = L.map(mapRef.current, {
         zoomControl: true,
         attributionControl: false,
       });
-      mapInstanceRef.current = map;
-
-      // Dark OSM tiles
+      mapInstanceRef.current = map;
       L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
         attribution: "© OpenStreetMap contributors",
         className: "map-tiles-dark",
-      }).addTo(map);
-
-      // Add markers + polyline
+      }).addTo(map);
       const points: [number, number][] = [];
 
       validIps.forEach((ip) => {
         const color = ip.riskLevel === "CLEAN" ? "var(--color-hawk-green)" : ip.riskLevel === "MALICIOUS" ? "#ff4444" : "#ffaa00";
         const point: [number, number] = [ip.lat, ip.lon];
-        points.push(point);
-
-        // Custom circle marker
+        points.push(point);
         const circle = L.circleMarker(point, {
           radius: 10,
           fillColor: color,
           color: "var(--color-hawk-bg)",
           fillOpacity: 0.85,
           weight: 2,
-        }).addTo(map);
-
-        // Popup
+        }).addTo(map);
         circle.bindPopup(
           `<div style="background:var(--hawk-bg);color:#e0e0e0;padding:10px;border-radius:8px;font-family:monospace;font-size:11px;min-width:180px">
             <div style="color:${color};font-weight:bold;margin-bottom:6px">Hop #${ip.hopNumber}</div>
@@ -88,9 +66,7 @@ export default function RelayMap({ ipResults }: Props) {
           </div>`,
           { className: "leaflet-popup-dark" }
         );
-      });
-
-      // Connecting polyline
+      });
       if (points.length > 1) {
         L.polyline(points, {
           color: "var(--color-hawk-green)",
@@ -98,9 +74,7 @@ export default function RelayMap({ ipResults }: Props) {
           opacity: 0.6,
           dashArray: "5, 8",
         }).addTo(map);
-      }
-
-      // Fit bounds
+      }
       if (points.length === 1) {
         map.setView(points[0], 5);
       } else if (points.length > 1) {

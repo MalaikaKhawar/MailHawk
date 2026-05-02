@@ -37,9 +37,7 @@ export default function HeroSection({ children }: { children: React.ReactNode })
 
     let raf: number;
     const draw = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      // Subtle grid
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.strokeStyle = "rgba(170,255,69,0.025)";
       ctx.lineWidth = 1;
       const g = 90;
@@ -64,26 +62,26 @@ export default function HeroSection({ children }: { children: React.ReactNode })
 
   return (
     <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden pt-14 bg-hawk-bg">
-      {/* Canvas bg */}
+      
       <canvas ref={canvasRef} className="absolute inset-0 pointer-events-none" aria-hidden />
 
-      {/* Radial glow overlay */}
+      
       <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_70%_55%_at_50%_40%,rgba(170,255,69,0.05)_0%,transparent_70%)]" aria-hidden />
 
-      {/* Content */}
+      
       <div className="relative z-10 w-full max-w-225 mx-auto mt-24 px-6 text-center">
-        {/* Eyebrow pill */}
+        
         <div className="mx-auto mb-6 w-fit animate-[slide-up_0.4s_ease_forwards] bg-hawk-card flex items-center gap-2 py-2 px-4 font-mono">
           <span className="animate-pulse w-2 h-2 rounded-full bg-hawk-green block" />
           <span className="text-hawk-text text-[0.85rem] tracking-[0.02em]">AI-Powered Email Forensics</span>
         </div>
 
-        {/* Big title */}
+        
         <h1 className="font-serif text-[clamp(3.5rem,9vw,7rem)] font-normal leading-[1.08] tracking-[-0.01em] text-hawk-text mb-4">
           Mail<span className="glow-text italic text-hawk-green">Hawk</span>
         </h1>
 
-        {/* Sub-headline */}
+        
         <p className="font-sans text-[1.05rem] text-hawk-muted max-w-140 mx-auto mb-10 leading-[1.65]">
           Analyze email headers. Detect spoofing and phishing. Investigate relay
           hops. Powered by AI, DNS forensics, and IP reputation data.
@@ -92,7 +90,7 @@ export default function HeroSection({ children }: { children: React.ReactNode })
         {children}
       </div>
 
-      {/* Bottom fade into next section */}
+      
       <div className="absolute bottom-0 left-0 right-0 h-40 pointer-events-none bg-[linear-gradient(to_bottom,transparent,var(--hawk-bg))]" aria-hidden />
     </section>
   );

@@ -63,7 +63,7 @@ export default function IPReputationCard({ ipResults }: Props) {
                   </div>
                 </div>
 
-                {/* Risk badge */}
+                
                 <span
                   className="text-xs font-mono font-bold px-2.5 py-1 rounded-none border shrink-0"
                   style={{ color: rc.color, background: "transparent", borderColor: rc.border }}
@@ -72,7 +72,7 @@ export default function IPReputationCard({ ipResults }: Props) {
                 </span>
               </div>
 
-              {/* Info grid */}
+              
               <div className="grid grid-cols-2 gap-2 text-[10px] font-mono">
                 <div className="flex items-center gap-1.5">
                   <Globe className="w-3 h-3 text-hawk-muted" />
@@ -87,7 +87,7 @@ export default function IPReputationCard({ ipResults }: Props) {
                 <div className="text-hawk-muted truncate col-span-2">{ip.isp || ip.org || "—"}</div>
               </div>
 
-              {/* Flags */}
+              
               <div className="flex flex-wrap gap-1.5 mt-2">
                 {ip.isTor && <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-[#ff444420] text-hawk-danger border border-[#ff444430]">⚠ TOR</span>}
                 {ip.isProxy && <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-[#ffaa0020] text-hawk-warning border border-[#ffaa0030]">⚠ PROXY</span>}

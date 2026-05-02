@@ -56,9 +56,9 @@ function hasEmbeddedUrl(url: string): boolean {
       }
     }
   } catch {
-    // If URL parsing fails, stick to a regex fallback
+
   }
-  // Regex fallback: look for http:// or https:// inside the query string
+
   const queryIndex = url.indexOf("?");
   if (queryIndex !== -1) {
     const query = url.slice(queryIndex);
@@ -109,8 +109,7 @@ function analyzeLink(
 
   const isEmbeddedRedirect = hasEmbeddedUrl(url);
 
-  // Mismatch logic: We don't want to penalize genuine brands (like Google, GitHub) 
-  // just because people link to them unless there's an embedded redirect being used.
+
   let mismatchesFromDomain = false;
   if (fromRoot && rootDomain && fromRoot !== rootDomain) {
     if (!isGenuineBrand || isEmbeddedRedirect) {
@@ -127,7 +126,6 @@ function analyzeLink(
   if (isLookalike)          { flags.push("Lookalike brand domain detected");       riskPoints += 30; }
   if (isEmbeddedRedirect)   { flags.push("Embedded URL detected (Open Redirect risk) — use caution"); riskPoints += 20; }
 
-  // Blend AI score (30%) with heuristic (70%) to prioritize programmatic rules on edge cases
   const aiScore = aiResult?.score ?? 30;
   const blended = riskPoints * 0.7 + aiScore * 0.3;
 
@@ -135,12 +133,10 @@ function analyzeLink(
   if (blended >= 35) riskLevel = "DANGEROUS";
   else if (blended >= 15) riskLevel = "SUSPICIOUS";
 
-  // If we decided it's safe but it has an embedded redirect, we prompt caution: 
   if (riskLevel === "SAFE" && isEmbeddedRedirect) {
-    riskLevel = "SUSPICIOUS"; // Ensure they take note of the embedded URL
+    riskLevel = "SUSPICIOUS";
   }
 
-  // AI says PHISHING → at least SUSPICIOUS
   if (aiResult?.label === "PHISHING" && riskLevel === "SAFE") riskLevel = "SUSPICIOUS";
 
   return {
@@ -171,7 +167,6 @@ export function mergeAILinkResults(
   });
 }
 
-// ─── Trust Score Calculator ───────────────────────────────────────────────────
 
 export function computeTrustScore(
   dnsResults: DnsResults,
@@ -182,7 +177,6 @@ export function computeTrustScore(
 ): TrustScore {
   const factors: TrustScore["factors"] = [];
 
-  // Factor 1: SPF (weight 20)
   const spfScore =
     dnsResults.spf.result === "pass"     ? 100 :
     dnsResults.spf.result === "neutral"  ? 60  :
@@ -190,16 +184,13 @@ export function computeTrustScore(
     dnsResults.spf.result === "fail"     ? 0   : 30;
   factors.push({ name: "SPF", score: spfScore, weight: 20 });
 
-  // Factor 2: DKIM (weight 20)
   const dkimScore =
     dnsResults.dkim.result === "valid"   ? 100 :
     dnsResults.dkim.result === "revoked" ? 0   : 40;
   factors.push({ name: "DKIM", score: dkimScore, weight: 20 });
 
-  // Factor 3: DMARC (weight 15)
   factors.push({ name: "DMARC", score: dnsResults.dmarc.trustabilityScore, weight: 15 });
 
-  // Factor 4: IP Reputation (weight 20)
   let ipScore = 100;
   if (ipResults.length > 0) {
     const avgAbuse  = ipResults.reduce((s, ip) => s + ip.abuseScore, 0) / ipResults.length;
@@ -209,7 +200,6 @@ export function computeTrustScore(
   }
   factors.push({ name: "IP Reputation", score: Math.round(ipScore), weight: 20 });
 
-  // Factor 5: Link Safety (weight 15)
   let linkScore = 100;
   if (linkResults.length > 0) {
     const scores = linkResults.map((l) => {
@@ -220,14 +210,11 @@ export function computeTrustScore(
   }
   factors.push({ name: "Link Safety", score: Math.round(linkScore), weight: 15 });
 
-  // Factor 6: Spoof Checks (weight 10)
   factors.push({ name: "Spoof Checks", score: Math.max(0, 100 - spoofDetection.riskScore), weight: 10 });
 
-  // Weighted average
   const totalWeight = factors.reduce((s, f) => s + f.weight, 0);
   const raw = factors.reduce((s, f) => s + f.score * f.weight, 0) / totalWeight;
 
-  // Small downward nudge from AI phishing probability
   const aiPenalty = (aiVerdict.phishingProbability ?? 0) * 0.1;
   const score = Math.round(Math.max(0, Math.min(100, raw - aiPenalty)));
 
