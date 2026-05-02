@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Shield } from "lucide-react";
+import { Shield, Heart } from "lucide-react";
 
 export default function Footer() {
   return (
@@ -45,10 +45,11 @@ export default function Footer() {
           </div>
 
           
-          <p className="font-mono text-[0.68rem] text-hawk-border-hover m-0">
-            © {new Date().getFullYear()} MailHawk - Developed with ❤️ by Malaika
-            Yasmeen Khawar
-          </p>
+          <div className="flex items-center gap-1.5 font-mono text-[0.68rem] text-hawk-border-hover">
+            <span>© {new Date().getFullYear()} MailHawk - Developed with</span>
+            <Heart className="w-3 h-3 text-[#ff4444] fill-current" />
+            <span>by Malaika Yasmeen Khawar</span>
+          </div>
         </div>
 
         

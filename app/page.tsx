@@ -3,35 +3,36 @@ import Footer from "@/components/shared/Footer";
 import HeroSection from "@/components/home/HeroSection";
 import FeatureBadges from "@/components/home/FeatureBadges";
 import InputTabs from "@/components/home/InputTabs";
+import { Search, Shield, Globe, Clipboard, Link as LinkIcon, Bot } from "lucide-react";
 
 const FEATURES = [
   {
-    icon: "🔍",
+    icon: <Search className="w-7 h-7 text-hawk-green" />,
     title: "Header Parsing",
     desc: "Extracts From, To, Subject, relay hops, authentication results, DKIM signature and all standard fields.",
   },
   {
-    icon: "🛡️",
+    icon: <Shield className="w-7 h-7 text-hawk-green" />,
     title: "Spoof Detection",
     desc: "Runs 13+ spoof checks including domain mismatch, display name impersonation and authentication failures.",
   },
   {
-    icon: "🌍",
+    icon: <Globe className="w-7 h-7 text-hawk-green" />,
     title: "IP Geolocation",
     desc: "Geolocates every relay hop, shows ISP info and flags proxies, Tor nodes and hosting providers.",
   },
   {
-    icon: "📋",
+    icon: <Clipboard className="w-7 h-7 text-hawk-green" />,
     title: "DNS Forensics",
     desc: "Checks SPF, DKIM and DMARC records in real-time via Cloudflare DNS. Shows trustability ratings.",
   },
   {
-    icon: "🔗",
+    icon: <LinkIcon className="w-7 h-7 text-hawk-green" />,
     title: "Link Analysis",
     desc: "Extracts and analyzes URLs for shorteners, IP-based URLs, lookalike domains and homograph attacks.",
   },
   {
-    icon: "🤖",
+    icon: <Bot className="w-7 h-7 text-hawk-green" />,
     title: "AI Verdict",
     desc: "GPT-powered forensic analysis gives red flags, trust indicators, recommendations and technical breakdown.",
   },

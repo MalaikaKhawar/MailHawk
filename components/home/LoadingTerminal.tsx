@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Progress } from "@/components/ui/progress";
+import { Check, Play, Circle } from "lucide-react";
 
 const STEPS = [
   "Parsing email header...",
@@ -68,7 +69,7 @@ export default function LoadingTerminal() {
               style={{ animation: state !== "pending" ? "terminal-line 0.3s ease forwards" : undefined }}
             >
               <span
-                className={`text-base w-5 shrink-0 ${
+                className={`flex items-center justify-center w-5 shrink-0 ${
                   state === "done"
                     ? "text-hawk-green"
                     : state === "active"
@@ -76,7 +77,7 @@ export default function LoadingTerminal() {
                     : "text-[#444455]"
                 }`}
               >
-                {state === "done" ? "✓" : state === "active" ? "▶" : "○"}
+                {state === "done" ? <Check className="w-4 h-4" /> : state === "active" ? <Play className="w-3.5 h-3.5 fill-current" /> : <Circle className="w-3.5 h-3.5" />}
               </span>
               <span
                 className={

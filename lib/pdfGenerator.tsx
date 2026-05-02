@@ -1,56 +1,71 @@
 import {
-  Document, Page, Text, View, StyleSheet, renderToBuffer, Font,
+  Document,
+  Page,
+  Text,
+  View,
+  StyleSheet,
+  renderToBuffer,
+  Font,
 } from "@react-pdf/renderer";
 import type { AnalysisResult } from "@/types";
 import React from "react";
-import path from "path";
-const F = (name: string) => path.join(process.cwd(), "public", "fonts", name);
+import path from "path";
+
+const F = (name: string) => path.join(process.cwd(), "public", "fonts", name);
+
 Font.register({
   family: "DM Mono",
   fonts: [
-    { src: F("DMMono-Regular.ttf"),      fontWeight: 400 },
-    { src: F("DMMono-Medium.ttf"),        fontWeight: 500 },
-    { src: F("DMMono-Italic.ttf"),        fontWeight: 400, fontStyle: "italic" },
-    { src: F("DMMono-MediumItalic.ttf"),  fontWeight: 500, fontStyle: "italic" },
+    { src: F("DMMono-Regular.ttf"), fontWeight: 400 },
+    { src: F("DMMono-Medium.ttf"), fontWeight: 500 },
+    { src: F("DMMono-Italic.ttf"), fontWeight: 400, fontStyle: "italic" },
+    { src: F("DMMono-MediumItalic.ttf"), fontWeight: 500, fontStyle: "italic" },
   ],
-});
+});
+
 Font.register({
   family: "Lato",
   fonts: [
-    { src: F("Lato-Regular.ttf"),      fontWeight: 400 },
-    { src: F("Lato-Medium.ttf"),        fontWeight: 500 },
-    { src: F("Lato-Bold.ttf"),          fontWeight: 700 },
-    { src: F("Lato-Italic.ttf"),        fontWeight: 400, fontStyle: "italic" },
-    { src: F("Lato-MediumItalic.ttf"),  fontWeight: 500, fontStyle: "italic" },
-    { src: F("Lato-BoldItalic.ttf"),    fontWeight: 700, fontStyle: "italic" },
+    { src: F("Lato-Regular.ttf"), fontWeight: 400 },
+    { src: F("Lato-Medium.ttf"), fontWeight: 500 },
+    { src: F("Lato-Bold.ttf"), fontWeight: 700 },
+    { src: F("Lato-Italic.ttf"), fontWeight: 400, fontStyle: "italic" },
+    { src: F("Lato-MediumItalic.ttf"), fontWeight: 500, fontStyle: "italic" },
+    { src: F("Lato-BoldItalic.ttf"), fontWeight: 700, fontStyle: "italic" },
   ],
-});
+});
+
 Font.register({
   family: "Instrument Serif",
   fonts: [
     { src: F("InstrumentSerif-Regular.ttf"), fontWeight: 400 },
-    { src: F("InstrumentSerif-Italic.ttf"),  fontWeight: 400, fontStyle: "italic" },
+    {
+      src: F("InstrumentSerif-Italic.ttf"),
+      fontWeight: 400,
+      fontStyle: "italic",
+    },
   ],
-});
-const C = {
-  bg:          "#0E2B1A",
-  bgDeep:      "#0A1F13",
-  bgAlt:       "#113620",
-  card:        "#154026",
-  cardHover:   "#194d2e",
-  border:      "#1e5935",
-  borderHover: "#267344",
-  green:       "#aaff45",
-  greenDim:    "#8edb2e",
-  text:        "#e8f5e9",
-  muted:       "#85a892",
-  dimmer:      "#4a7060",
-  danger:      "#ff5252",
-  warn:        "#ffaa00",
-  safe:        "#aaff45",
-};
+});
 
-const S = StyleSheet.create({
+const C = {
+  bg: "#0E2B1A",
+  bgDeep: "#0A1F13",
+  bgAlt: "#113620",
+  card: "#154026",
+  cardHover: "#194d2e",
+  border: "#1e5935",
+  borderHover: "#267344",
+  green: "#aaff45",
+  greenDim: "#8edb2e",
+  text: "#e8f5e9",
+  muted: "#85a892",
+  dimmer: "#4a7060",
+  danger: "#ff5252",
+  warn: "#ffaa00",
+  safe: "#aaff45",
+};
+
+const S = StyleSheet.create({
   coverPage: {
     backgroundColor: C.bgDeep,
     color: C.text,
@@ -64,7 +79,8 @@ const S = StyleSheet.create({
     color: C.text,
     padding: 0,
     fontSize: 9,
-  },
+  },
+
   coverTopBar: {
     backgroundColor: C.card,
     borderBottomWidth: 1,
@@ -105,7 +121,8 @@ const S = StyleSheet.create({
     fontSize: 7,
     color: C.dimmer,
     letterSpacing: 0.5,
-  },
+  },
+
   coverHero: {
     flex: 1,
     paddingHorizontal: 48,
@@ -133,7 +150,8 @@ const S = StyleSheet.create({
     lineHeight: 1.6,
     maxWidth: 360,
     marginBottom: 40,
-  },
+  },
+
   verdictStrip: {
     flexDirection: "row",
     alignItems: "stretch",
@@ -194,13 +212,15 @@ const S = StyleSheet.create({
     borderLeftWidth: 2,
     borderLeftColor: C.border,
     paddingLeft: 12,
-  },
+  },
+
   pageBody: {
     flex: 1,
     paddingHorizontal: 40,
     paddingTop: 32,
     paddingBottom: 48,
-  },
+  },
+
   pageTopBar: {
     backgroundColor: C.card,
     borderBottomWidth: 1,
@@ -222,7 +242,8 @@ const S = StyleSheet.create({
     fontFamily: "DM Mono",
     fontSize: 7,
     color: C.dimmer,
-  },
+  },
+
   section: { marginBottom: 24 },
 
   sectionHeader: {
@@ -252,14 +273,16 @@ const S = StyleSheet.create({
     fontSize: 7,
     color: C.dimmer,
     marginLeft: "auto",
-  },
+  },
+
   paragraph: {
     fontFamily: "Lato",
     fontSize: 9,
     color: C.muted,
     lineHeight: 1.7,
     marginBottom: 6,
-  },
+  },
+
   row: {
     flexDirection: "row",
     marginBottom: 5,
@@ -280,7 +303,8 @@ const S = StyleSheet.create({
     color: C.text,
     flex: 1,
     lineHeight: 1.5,
-  },
+  },
+
   authBlock: {
     flexDirection: "row",
     marginBottom: 8,
@@ -321,7 +345,8 @@ const S = StyleSheet.create({
     fontSize: 8,
     color: C.muted,
     lineHeight: 1.5,
-  },
+  },
+
   table: {
     borderWidth: 1,
     borderColor: C.border,
@@ -367,7 +392,8 @@ const S = StyleSheet.create({
     fontFamily: "DM Mono",
     fontSize: 7.5,
     color: C.text,
-  },
+  },
+
   flagCard: {
     flexDirection: "row",
     marginBottom: 6,
@@ -408,7 +434,8 @@ const S = StyleSheet.create({
     backgroundColor: C.card,
     borderLeftWidth: 1,
     borderLeftColor: C.border,
-  },
+  },
+
   recItem: {
     flexDirection: "row",
     marginBottom: 5,
@@ -430,7 +457,8 @@ const S = StyleSheet.create({
     color: C.muted,
     flex: 1,
     lineHeight: 1.5,
-  },
+  },
+
   trustItem: {
     flexDirection: "row",
     alignItems: "flex-start",
@@ -449,7 +477,8 @@ const S = StyleSheet.create({
     color: C.muted,
     flex: 1,
     lineHeight: 1.5,
-  },
+  },
+
   techGrid: {
     flexDirection: "row",
     flexWrap: "wrap",
@@ -477,7 +506,8 @@ const S = StyleSheet.create({
     fontSize: 8,
     color: C.muted,
     lineHeight: 1.6,
-  },
+  },
+
   footer: {
     position: "absolute",
     bottom: 0,
@@ -503,35 +533,35 @@ const S = StyleSheet.create({
     fontSize: 7,
     color: C.dimmer,
   },
-});
+});
 
 function verdictColor(v: string): string {
-  if (v === "SAFE")       return C.safe;
+  if (v === "SAFE") return C.safe;
   if (v === "SUSPICIOUS") return C.warn;
   return C.danger;
 }
 
 function authColor(r: string): string {
-  if (r === "pass")    return C.green;
-  if (r === "fail")    return C.danger;
+  if (r === "pass") return C.green;
+  if (r === "fail") return C.danger;
   return C.warn;
 }
 
 function sevColor(s: string): string {
-  if (s === "HIGH")   return C.danger;
+  if (s === "HIGH") return C.danger;
   if (s === "MEDIUM") return C.warn;
   return C.green;
 }
 
 function prioColor(p: string): string {
   if (p === "URGENT") return C.danger;
-  if (p === "HIGH")   return C.warn;
+  if (p === "HIGH") return C.warn;
   return C.green;
 }
 
 function prioBackground(p: string): string {
   if (p === "URGENT") return "#330c0c";
-  if (p === "HIGH")   return "#2c1c00";
+  if (p === "HIGH") return "#2c1c00";
   return "#0f2b0f";
 }
 
@@ -539,13 +569,16 @@ function riskColor(score: number): string {
   if (score >= 61) return C.danger;
   if (score >= 31) return C.warn;
   return C.green;
-}
+}
 
 function PageTopBar({ title, meta }: { title: string; meta?: string }) {
   return (
     <View style={S.pageTopBar} fixed>
       <Text style={S.pageTopBarLogo}>MAILHAWK</Text>
-      <Text style={S.pageTopBarMeta}>{title}{meta ? ` · ${meta}` : ""}</Text>
+      <Text style={S.pageTopBarMeta}>
+        {title}
+        {meta ? ` · ${meta}` : ""}
+      </Text>
     </View>
   );
 }
@@ -563,8 +596,13 @@ function SectionHeader({ title, index }: { title: string; index?: string }) {
 function Footer({ label }: { label: string }) {
   return (
     <View style={S.footer} fixed>
-      <Text style={S.footerLeft}>{label} · Developed with ❤️ by Malaika Yasmeen Khawar</Text>
-      <Text style={S.footerRight} render={({ pageNumber, totalPages }) => `${pageNumber} / ${totalPages}`} />
+      <Text style={S.footerLeft}>
+        {label} · Developed with ❤️ by Malaika Yasmeen Khawar
+      </Text>
+      <Text
+        style={S.footerRight}
+        render={({ pageNumber, totalPages }) => `${pageNumber} / ${totalPages}`}
+      />
     </View>
   );
 }
@@ -576,7 +614,7 @@ function LabelValue({ label, value }: { label: string; value: string }) {
       <Text style={S.rowValue}>{value || "-"}</Text>
     </View>
   );
-}
+}
 
 function MailHawkPDF({ data }: { data: AnalysisResult }) {
   const {
@@ -589,19 +627,19 @@ function MailHawkPDF({ data }: { data: AnalysisResult }) {
     trustScore: ts,
   } = data;
 
-  const verdict    = ai?.verdict || sd.verdict;
-  const riskScore  = sd.riskScore;
-  const vColor     = verdictColor(verdict);
-  const rColor     = riskColor(riskScore);
-  const genDate    = new Date(data.analyzedAt).toUTCString();
+  const verdict = ai?.verdict || sd.verdict;
+  const riskScore = sd.riskScore;
+  const vColor = verdictColor(verdict);
+  const rColor = riskColor(riskScore);
+  const genDate = new Date(data.analyzedAt).toUTCString();
 
   return (
-    <Document title="MailHawk Forensic Report" author="MailHawk" creator="MailHawk · mailhawk.app">
-
-      
+    <Document
+      title="MailHawk Forensic Report"
+      author="MailHawk"
+      creator="MailHawk · mailhawk.app"
+    >
       <Page size="A4" style={[S.coverPage, { fontFamily: "Lato" }]}>
-
-        
         <View style={S.coverTopBar}>
           <View style={S.coverLogoGroup}>
             <View style={S.coverLogoIcon}>
@@ -609,38 +647,87 @@ function MailHawkPDF({ data }: { data: AnalysisResult }) {
             </View>
             <Text style={S.coverLogoName}>MAILHAWK</Text>
           </View>
-          <Text style={S.coverTopMeta}>EMAIL HEADER FORENSICS · AI SPOOF DETECTION</Text>
+          <Text style={S.coverTopMeta}>
+            EMAIL HEADER FORENSICS · AI SPOOF DETECTION
+          </Text>
         </View>
 
-        
         <View style={S.coverHero}>
           <View>
-            
             <Text style={S.coverHeadline}>
               Forensic{"\n"}
-              <Text style={S.coverHeadlineAccent}>Analysis</Text>{" "}
-              Report
+              <Text style={S.coverHeadlineAccent}>Analysis</Text> Report
             </Text>
             <Text style={S.coverSubline}>
-              AI-powered email header analysis · SPF, DKIM & DMARC verification ·
-              IP reputation · Link inspection · Relay path tracing
+              AI-powered email header analysis · SPF, DKIM & DMARC verification
+              · IP reputation · Link inspection · Relay path tracing
             </Text>
 
-            
             <View style={S.verdictStrip}>
               <View style={S.verdictStripLabel}>
-                <Text style={{ fontFamily: "DM Mono", fontSize: 7, color: C.dimmer, letterSpacing: 1 }}>VERDICT</Text>
+                <Text
+                  style={{
+                    fontFamily: "DM Mono",
+                    fontSize: 7,
+                    color: C.dimmer,
+                    letterSpacing: 1,
+                  }}
+                >
+                  VERDICT
+                </Text>
               </View>
-              <View style={[S.verdictStripValue, { backgroundColor: verdictColor(verdict) === C.green ? "#0f2a10" : verdictColor(verdict) === C.warn ? "#2a1a00" : "#2a0808" }]}>
-                <Text style={[S.verdictStripValue, { color: vColor, paddingHorizontal: 0, paddingVertical: 0 }]}>{verdict}</Text>
+              <View
+                style={[
+                  S.verdictStripValue,
+                  {
+                    backgroundColor:
+                      verdictColor(verdict) === C.green
+                        ? "#0f2a10"
+                        : verdictColor(verdict) === C.warn
+                          ? "#2a1a00"
+                          : "#2a0808",
+                  },
+                ]}
+              >
+                <Text
+                  style={[
+                    S.verdictStripValue,
+                    { color: vColor, paddingHorizontal: 0, paddingVertical: 0 },
+                  ]}
+                >
+                  {verdict}
+                </Text>
               </View>
               <View style={[S.verdictStripScore, { backgroundColor: C.card }]}>
-                <Text style={[S.verdictScoreNum, { color: rColor }]}>{riskScore}</Text>
+                <Text style={[S.verdictScoreNum, { color: rColor }]}>
+                  {riskScore}
+                </Text>
                 <Text style={S.verdictScoreLabel}>RISK / 100</Text>
               </View>
               {ts && (
-                <View style={[S.verdictStripScore, { backgroundColor: C.bgAlt, borderLeftWidth: 1, borderLeftColor: C.border }]}>
-                  <Text style={[S.verdictScoreNum, { color: ts.tier === "trusted" ? C.green : ts.tier === "uncertain" ? C.warn : C.danger }]}>
+                <View
+                  style={[
+                    S.verdictStripScore,
+                    {
+                      backgroundColor: C.bgAlt,
+                      borderLeftWidth: 1,
+                      borderLeftColor: C.border,
+                    },
+                  ]}
+                >
+                  <Text
+                    style={[
+                      S.verdictScoreNum,
+                      {
+                        color:
+                          ts.tier === "trusted"
+                            ? C.green
+                            : ts.tier === "uncertain"
+                              ? C.warn
+                              : C.danger,
+                      },
+                    ]}
+                  >
                     {ts.score}%
                   </Text>
                   <Text style={S.verdictScoreLabel}>TRUST SCORE</Text>
@@ -648,69 +735,118 @@ function MailHawkPDF({ data }: { data: AnalysisResult }) {
               )}
             </View>
 
-            
             {ai?.oneLinerVerdict && (
-              <Text style={S.coverOneLiner}>
-                {ai.oneLinerVerdict}
-              </Text>
+              <Text style={S.coverOneLiner}>{ai.oneLinerVerdict}</Text>
             )}
           </View>
 
-          
-          <View style={{ borderTopWidth: 1, borderTopColor: C.border, paddingTop: 18, flexDirection: "row", gap: 32 }}>
+          <View
+            style={{
+              borderTopWidth: 1,
+              borderTopColor: C.border,
+              paddingTop: 18,
+              flexDirection: "row",
+              gap: 32,
+            }}
+          >
             {[
-              ["GENERATED",   genDate],
+              ["GENERATED", genDate],
               ["FROM DOMAIN", ph.fromDomain || "-"],
-              ["SUBJECT",     ph.subject ? ph.subject.slice(0, 40) + (ph.subject.length > 40 ? "…" : "") : "-"],
+              [
+                "SUBJECT",
+                ph.subject
+                  ? ph.subject.slice(0, 40) +
+                    (ph.subject.length > 40 ? "…" : "")
+                  : "-",
+              ],
               ["TRUST SCORE", ts ? ts.label : "-"],
             ].map(([k, v]) => (
               <View key={k} style={{ flex: 1 }}>
-                <Text style={{ fontFamily: "DM Mono", fontSize: 6.5, color: C.dimmer, letterSpacing: 1, marginBottom: 4 }}>{k}</Text>
-                <Text style={{
-                  fontFamily: "DM Mono", fontSize: 8, lineHeight: 1.4,
-                  color: k === "TRUST SCORE" && ts
-                    ? ts.tier === "trusted" ? C.green : ts.tier === "uncertain" ? C.warn : C.danger
-                    : C.muted,
-                }}>{v}</Text>
+                <Text
+                  style={{
+                    fontFamily: "DM Mono",
+                    fontSize: 6.5,
+                    color: C.dimmer,
+                    letterSpacing: 1,
+                    marginBottom: 4,
+                  }}
+                >
+                  {k}
+                </Text>
+                <Text
+                  style={{
+                    fontFamily: "DM Mono",
+                    fontSize: 8,
+                    lineHeight: 1.4,
+                    color:
+                      k === "TRUST SCORE" && ts
+                        ? ts.tier === "trusted"
+                          ? C.green
+                          : ts.tier === "uncertain"
+                            ? C.warn
+                            : C.danger
+                        : C.muted,
+                  }}
+                >
+                  {v}
+                </Text>
               </View>
             ))}
           </View>
         </View>
-
       </Page>
 
-      
       <Page size="A4" style={S.page}>
         <PageTopBar title="FORENSIC REPORT" meta="SUMMARY & METADATA" />
 
         <View style={S.pageBody}>
-
-          
           <View style={S.section}>
             <SectionHeader title="Executive Summary" index="01" />
-            <Text style={S.paragraph}>{ai?.summary || "No AI summary available. Please review the header data manually."}</Text>
+            <Text style={S.paragraph}>
+              {ai?.summary ||
+                "No AI summary available. Please review the header data manually."}
+            </Text>
           </View>
 
-          
           <View style={S.section}>
             <SectionHeader title="Email Metadata" index="02" />
-            <View style={{ borderWidth: 1, borderColor: C.border, padding: 14, backgroundColor: C.bgAlt }}>
+            <View
+              style={{
+                borderWidth: 1,
+                borderColor: C.border,
+                padding: 14,
+                backgroundColor: C.bgAlt,
+              }}
+            >
               {[
-                ["From",            `${ph.from.name ? ph.from.name + "  " : ""}<${ph.from.email}>`],
-                ["To",              ph.to],
-                ["Subject",         ph.subject],
-                ["Date",            ph.date],
-                ["Message-ID",      ph.messageId],
-                ["Return-Path",     ph.returnPath],
-                ["Reply-To",        ph.replyTo || "-"],
+                [
+                  "From",
+                  `${ph.from.name ? ph.from.name + "  " : ""}<${ph.from.email}>`,
+                ],
+                ["To", ph.to],
+                ["Subject", ph.subject],
+                ["Date", ph.date],
+                ["Message-ID", ph.messageId],
+                ["Return-Path", ph.returnPath],
+                ["Reply-To", ph.replyTo || "-"],
                 ["X-Originating-IP", ph.xOriginatingIp || "-"],
-                ["X-Mailer",        ph.xMailer || "-"],
-                ["X-Spam-Score",    ph.xSpamScore !== undefined ? String(ph.xSpamScore) : "-"],
+                ["X-Mailer", ph.xMailer || "-"],
+                [
+                  "X-Spam-Score",
+                  ph.xSpamScore !== undefined ? String(ph.xSpamScore) : "-",
+                ],
               ].map(([label, val], i) => (
-                <View key={label}
+                <View
+                  key={label}
                   style={[
                     S.row,
-                    i > 0 ? { borderTopWidth: 1, borderTopColor: C.border, paddingTop: 5 } : {},
+                    i > 0
+                      ? {
+                          borderTopWidth: 1,
+                          borderTopColor: C.border,
+                          paddingTop: 5,
+                        }
+                      : {},
                   ]}
                 >
                   <Text style={S.rowLabel}>{label}</Text>
@@ -720,46 +856,70 @@ function MailHawkPDF({ data }: { data: AnalysisResult }) {
             </View>
           </View>
 
-          
           <View style={S.section}>
             <SectionHeader title="Authentication Results" index="03" />
 
-            {([
-              ["SPF",   ph.authResults.spf,   dns?.spf?.record,   dns?.spf?.explanation],
-              ["DKIM",  ph.authResults.dkim,  dns?.dkim?.record,  dns?.dkim?.explanation],
-              ["DMARC", ph.authResults.dmarc, dns?.dmarc?.record, dns?.dmarc?.explanation],
-            ] as [string, string, string | null, string][]).map(([label, result, record, explanation]) => (
+            {(
+              [
+                [
+                  "SPF",
+                  ph.authResults.spf,
+                  dns?.spf?.record,
+                  dns?.spf?.explanation,
+                ],
+                [
+                  "DKIM",
+                  ph.authResults.dkim,
+                  dns?.dkim?.record,
+                  dns?.dkim?.explanation,
+                ],
+                [
+                  "DMARC",
+                  ph.authResults.dmarc,
+                  dns?.dmarc?.record,
+                  dns?.dmarc?.explanation,
+                ],
+              ] as [string, string, string | null, string][]
+            ).map(([label, result, record, explanation]) => (
               <View key={label} style={S.authBlock}>
                 <View style={S.authBlockLeft}>
                   <Text style={S.authBlockLabel}>{label}</Text>
                 </View>
                 <View style={S.authBlockRight}>
-                  <Text style={[S.authBlockResult, { color: authColor(result) }]}>
+                  <Text
+                    style={[S.authBlockResult, { color: authColor(result) }]}
+                  >
                     {result.toUpperCase()}
                   </Text>
                   {record && (
-                    <Text style={{ fontFamily: "DM Mono", fontSize: 6.5, color: C.dimmer, marginBottom: 3, lineHeight: 1.4 }}>
+                    <Text
+                      style={{
+                        fontFamily: "DM Mono",
+                        fontSize: 6.5,
+                        color: C.dimmer,
+                        marginBottom: 3,
+                        lineHeight: 1.4,
+                      }}
+                    >
                       {record.length > 90 ? record.slice(0, 90) + "…" : record}
                     </Text>
                   )}
-                  <Text style={S.authBlockExplanation}>{explanation || "-"}</Text>
+                  <Text style={S.authBlockExplanation}>
+                    {explanation || "-"}
+                  </Text>
                 </View>
               </View>
             ))}
           </View>
-
         </View>
 
         <Footer label="MailHawk · Forensic Report" />
       </Page>
 
-      
       <Page size="A4" style={S.page}>
         <PageTopBar title="FORENSIC REPORT" meta="RELAY PATH & IP REPUTATION" />
 
         <View style={S.pageBody}>
-
-          
           <View style={S.section}>
             <SectionHeader title="Email Relay Path" index="04" />
             {ph.relayHops.length === 0 ? (
@@ -767,20 +927,61 @@ function MailHawkPDF({ data }: { data: AnalysisResult }) {
             ) : (
               <View style={S.table}>
                 <View style={S.tableHead}>
-                  {(["#", "FROM SERVER", "BY SERVER", "IP ADDRESS", "PROTOCOL", "DELAY"] as const).map((h, i) => (
-                    <Text key={h} style={[S.th, { flex: i === 0 ? 0.3 : i === 3 ? 1.5 : 1 }]}>{h}</Text>
+                  {(
+                    [
+                      "#",
+                      "FROM SERVER",
+                      "BY SERVER",
+                      "IP ADDRESS",
+                      "PROTOCOL",
+                      "DELAY",
+                    ] as const
+                  ).map((h, i) => (
+                    <Text
+                      key={h}
+                      style={[
+                        S.th,
+                        { flex: i === 0 ? 0.3 : i === 3 ? 1.5 : 1 },
+                      ]}
+                    >
+                      {h}
+                    </Text>
                   ))}
                 </View>
                 {ph.relayHops.map((hop, i) => (
-                  <View key={hop.hopNumber} style={i % 2 === 0 ? S.tableRow : S.tableRowAlt}>
-                    <Text style={[S.tdHighlight, { flex: 0.3, color: C.green }]}>{hop.hopNumber}</Text>
+                  <View
+                    key={hop.hopNumber}
+                    style={i % 2 === 0 ? S.tableRow : S.tableRowAlt}
+                  >
+                    <Text
+                      style={[S.tdHighlight, { flex: 0.3, color: C.green }]}
+                    >
+                      {hop.hopNumber}
+                    </Text>
                     <Text style={[S.td, { flex: 1 }]}>{hop.from || "-"}</Text>
                     <Text style={[S.td, { flex: 1 }]}>{hop.by || "-"}</Text>
-                    <Text style={[S.td, { flex: 1.5, color: hop.isPrivateIp ? C.dimmer : C.text }]}>
-                      {hop.ip || "-"}{hop.isPrivateIp ? " (private)" : ""}
+                    <Text
+                      style={[
+                        S.td,
+                        {
+                          flex: 1.5,
+                          color: hop.isPrivateIp ? C.dimmer : C.text,
+                        },
+                      ]}
+                    >
+                      {hop.ip || "-"}
+                      {hop.isPrivateIp ? " (private)" : ""}
                     </Text>
                     <Text style={[S.td, { flex: 1 }]}>{hop.protocol}</Text>
-                    <Text style={[S.td, { flex: 1, color: hop.delaySeconds > 3600 ? C.warn : C.muted }]}>
+                    <Text
+                      style={[
+                        S.td,
+                        {
+                          flex: 1,
+                          color: hop.delaySeconds > 3600 ? C.warn : C.muted,
+                        },
+                      ]}
+                    >
                       {hop.delaySeconds > 0 ? `${hop.delaySeconds}s` : "-"}
                     </Text>
                   </View>
@@ -789,23 +990,54 @@ function MailHawkPDF({ data }: { data: AnalysisResult }) {
             )}
           </View>
 
-          
           {ipResults.length > 0 && (
             <View style={S.section}>
               <SectionHeader title="IP Reputation Analysis" index="05" />
               <View style={S.table}>
                 <View style={S.tableHead}>
-                  {["IP ADDRESS", "LOCATION", "ISP / ORG", "ABUSE", "RISK"].map((h, i) => (
-                    <Text key={h} style={[S.th, { flex: i === 2 ? 1.5 : i === 0 ? 1.2 : 1 }]}>{h}</Text>
-                  ))}
+                  {["IP ADDRESS", "LOCATION", "ISP / ORG", "ABUSE", "RISK"].map(
+                    (h, i) => (
+                      <Text
+                        key={h}
+                        style={[
+                          S.th,
+                          { flex: i === 2 ? 1.5 : i === 0 ? 1.2 : 1 },
+                        ]}
+                      >
+                        {h}
+                      </Text>
+                    ),
+                  )}
                 </View>
                 {ipResults.map((ip, i) => (
-                  <View key={ip.ip} style={i % 2 === 0 ? S.tableRow : S.tableRowAlt}>
+                  <View
+                    key={ip.ip}
+                    style={i % 2 === 0 ? S.tableRow : S.tableRowAlt}
+                  >
                     <Text style={[S.tdHighlight, { flex: 1.2 }]}>{ip.ip}</Text>
-                    <Text style={[S.td, { flex: 1 }]}>{ip.city ? `${ip.city}, ` : ""}{ip.countryCode || "-"}</Text>
-                    <Text style={[S.td, { flex: 1.5 }]}>{(ip.isp || ip.org || "-").slice(0, 28)}</Text>
+                    <Text style={[S.td, { flex: 1 }]}>
+                      {ip.city ? `${ip.city}, ` : ""}
+                      {ip.countryCode || "-"}
+                    </Text>
+                    <Text style={[S.td, { flex: 1.5 }]}>
+                      {(ip.isp || ip.org || "-").slice(0, 28)}
+                    </Text>
                     <Text style={[S.td, { flex: 1 }]}>{ip.abuseScore}/100</Text>
-                    <Text style={[S.td, { flex: 1, color: verdictColor(ip.riskLevel === "CLEAN" ? "SAFE" : ip.riskLevel === "MALICIOUS" ? "SPOOFED" : "SUSPICIOUS") }]}>
+                    <Text
+                      style={[
+                        S.td,
+                        {
+                          flex: 1,
+                          color: verdictColor(
+                            ip.riskLevel === "CLEAN"
+                              ? "SAFE"
+                              : ip.riskLevel === "MALICIOUS"
+                                ? "SPOOFED"
+                                : "SUSPICIOUS",
+                          ),
+                        },
+                      ]}
+                    >
                       {ip.riskLevel}
                     </Text>
                   </View>
@@ -814,97 +1046,158 @@ function MailHawkPDF({ data }: { data: AnalysisResult }) {
             </View>
           )}
 
-          
           <View style={S.section}>
             <SectionHeader title="Spoof Detection Checks" index="06" />
             <View style={S.table}>
               <View style={S.tableHead}>
                 {["CHECK", "STATUS", "SEVERITY", "DETAIL"].map((h, i) => (
-                  <Text key={h} style={[S.th, { flex: i === 3 ? 2.5 : i === 0 ? 1.5 : 1 }]}>{h}</Text>
+                  <Text
+                    key={h}
+                    style={[S.th, { flex: i === 3 ? 2.5 : i === 0 ? 1.5 : 1 }]}
+                  >
+                    {h}
+                  </Text>
                 ))}
               </View>
               {sd.checks.map((chk, i) => (
                 <View key={i} style={i % 2 === 0 ? S.tableRow : S.tableRowAlt}>
-                  <Text style={[S.td, { flex: 1.5, color: C.text }]}>{chk.name}</Text>
-                  <Text style={[S.td, { flex: 1, color: chk.passed ? C.green : C.danger }]}>
+                  <Text style={[S.td, { flex: 1.5, color: C.text }]}>
+                    {chk.name}
+                  </Text>
+                  <Text
+                    style={[
+                      S.td,
+                      { flex: 1, color: chk.passed ? C.green : C.danger },
+                    ]}
+                  >
                     {chk.passed ? "PASSED" : "FAILED"}
                   </Text>
-                  <Text style={[S.td, { flex: 1, color: sevColor(chk.severity) }]}>{chk.severity}</Text>
+                  <Text
+                    style={[S.td, { flex: 1, color: sevColor(chk.severity) }]}
+                  >
+                    {chk.severity}
+                  </Text>
                   <Text style={[S.td, { flex: 2.5 }]}>{chk.detail}</Text>
                 </View>
               ))}
             </View>
           </View>
-
         </View>
 
         <Footer label="MailHawk · Forensic Report" />
       </Page>
 
-      
       <Page size="A4" style={S.page}>
-        <PageTopBar title="FORENSIC REPORT" meta="AI ANALYSIS & RECOMMENDATIONS" />
+        <PageTopBar
+          title="FORENSIC REPORT"
+          meta="AI ANALYSIS & RECOMMENDATIONS"
+        />
 
         <View style={S.pageBody}>
-
-          
           {linkResults.length > 0 && (
             <View style={S.section}>
               <SectionHeader title="Link Analysis" index="07" />
               <View style={S.table}>
                 <View style={S.tableHead}>
                   {["URL", "DOMAIN", "RISK", "FLAGS"].map((h, i) => (
-                    <Text key={h} style={[S.th, { flex: i === 0 ? 2.5 : i === 3 ? 1.5 : 1 }]}>{h}</Text>
+                    <Text
+                      key={h}
+                      style={[
+                        S.th,
+                        { flex: i === 0 ? 2.5 : i === 3 ? 1.5 : 1 },
+                      ]}
+                    >
+                      {h}
+                    </Text>
                   ))}
                 </View>
                 {linkResults.slice(0, 12).map((link, i) => (
-                  <View key={i} style={i % 2 === 0 ? S.tableRow : S.tableRowAlt}>
-                    <Text style={[S.td, { flex: 2.5 }]}>{link.url.length > 50 ? link.url.slice(0, 50) + "…" : link.url}</Text>
-                    <Text style={[S.td, { flex: 1, color: C.text }]}>{link.domain}</Text>
-                    <Text style={[S.td, { flex: 1, color: verdictColor(link.riskLevel === "SAFE" ? "SAFE" : link.riskLevel === "DANGEROUS" ? "SPOOFED" : "SUSPICIOUS") }]}>
+                  <View
+                    key={i}
+                    style={i % 2 === 0 ? S.tableRow : S.tableRowAlt}
+                  >
+                    <Text style={[S.td, { flex: 2.5 }]}>
+                      {link.url.length > 50
+                        ? link.url.slice(0, 50) + "…"
+                        : link.url}
+                    </Text>
+                    <Text style={[S.td, { flex: 1, color: C.text }]}>
+                      {link.domain}
+                    </Text>
+                    <Text
+                      style={[
+                        S.td,
+                        {
+                          flex: 1,
+                          color: verdictColor(
+                            link.riskLevel === "SAFE"
+                              ? "SAFE"
+                              : link.riskLevel === "DANGEROUS"
+                                ? "SPOOFED"
+                                : "SUSPICIOUS",
+                          ),
+                        },
+                      ]}
+                    >
                       {link.riskLevel}
                     </Text>
-                    <Text style={[S.td, { flex: 1.5 }]}>{link.flags.slice(0, 3).join(", ") || "None"}</Text>
+                    <Text style={[S.td, { flex: 1.5 }]}>
+                      {link.flags.slice(0, 3).join(", ") || "None"}
+                    </Text>
                   </View>
                 ))}
               </View>
             </View>
           )}
 
-          
           {ai?.technicalBreakdown && (
             <View style={S.section}>
               <SectionHeader title="AI Technical Breakdown" index="08" />
               <View style={S.techGrid}>
-                {([
-                  ["SPF Analysis",    ai.technicalBreakdown.spfAnalysis],
-                  ["DKIM Analysis",   ai.technicalBreakdown.dkimAnalysis],
-                  ["DMARC Analysis",  ai.technicalBreakdown.dmarcAnalysis],
-                  ["Routing",         ai.technicalBreakdown.routingAnalysis],
-                  ["IP Analysis",     ai.technicalBreakdown.ipAnalysis],
-                ] as [string, string][]).filter(([, v]) => v && v !== "AI unavailable").map(([label, text]) => (
-                  <View key={label} style={S.techCell}>
-                    <Text style={S.techCellLabel}>{label}</Text>
-                    <Text style={S.techCellText}>{text}</Text>
-                  </View>
-                ))}
+                {(
+                  [
+                    ["SPF Analysis", ai.technicalBreakdown.spfAnalysis],
+                    ["DKIM Analysis", ai.technicalBreakdown.dkimAnalysis],
+                    ["DMARC Analysis", ai.technicalBreakdown.dmarcAnalysis],
+                    ["Routing", ai.technicalBreakdown.routingAnalysis],
+                    ["IP Analysis", ai.technicalBreakdown.ipAnalysis],
+                  ] as [string, string][]
+                )
+                  .filter(([, v]) => v && v !== "AI unavailable")
+                  .map(([label, text]) => (
+                    <View key={label} style={S.techCell}>
+                      <Text style={S.techCellLabel}>{label}</Text>
+                      <Text style={S.techCellText}>{text}</Text>
+                    </View>
+                  ))}
               </View>
             </View>
           )}
 
-          
           {ai?.redFlags && ai.redFlags.length > 0 && (
             <View style={S.section}>
               <SectionHeader title="Red Flags" index="09" />
               {ai.redFlags.map((f, i) => (
                 <View key={i} style={S.flagCard}>
-                  <View style={[S.flagSevBar, { backgroundColor: sevColor(f.severity) }]} />
+                  <View
+                    style={[
+                      S.flagSevBar,
+                      { backgroundColor: sevColor(f.severity) },
+                    ]}
+                  />
                   <View style={S.flagBody}>
                     <Text style={S.flagTitle}>{f.flag}</Text>
                     <Text style={S.flagExplanation}>{f.explanation}</Text>
                   </View>
                   <View style={S.flagSevLabel}>
-                    <Text style={{ fontFamily: "DM Mono", fontSize: 6.5, color: sevColor(f.severity), letterSpacing: 0.8 }}>
+                    <Text
+                      style={{
+                        fontFamily: "DM Mono",
+                        fontSize: 6.5,
+                        color: sevColor(f.severity),
+                        letterSpacing: 0.8,
+                      }}
+                    >
                       {f.severity}
                     </Text>
                   </View>
@@ -913,7 +1206,6 @@ function MailHawkPDF({ data }: { data: AnalysisResult }) {
             </View>
           )}
 
-          
           {ai?.trustIndicators && ai.trustIndicators.length > 0 && (
             <View style={S.section}>
               <SectionHeader title="Trust Indicators" index="10" />
@@ -926,18 +1218,22 @@ function MailHawkPDF({ data }: { data: AnalysisResult }) {
             </View>
           )}
 
-          
           {ai?.recommendations && ai.recommendations.length > 0 && (
             <View style={S.section}>
               <SectionHeader title="Recommendations" index="11" />
               {ai.recommendations.map((r, i) => (
                 <View key={i} style={S.recItem}>
-                  <Text style={[S.recBadge, {
-                    color: prioColor(r.priority),
-                    backgroundColor: prioBackground(r.priority),
-                    borderWidth: 1,
-                    borderColor: prioColor(r.priority),
-                  }]}>
+                  <Text
+                    style={[
+                      S.recBadge,
+                      {
+                        color: prioColor(r.priority),
+                        backgroundColor: prioBackground(r.priority),
+                        borderWidth: 1,
+                        borderColor: prioColor(r.priority),
+                      },
+                    ]}
+                  >
                     {r.priority}
                   </Text>
                   <Text style={S.recText}>{r.action}</Text>
@@ -946,39 +1242,73 @@ function MailHawkPDF({ data }: { data: AnalysisResult }) {
             </View>
           )}
 
-          
           {ai && (
-            <View style={{ borderWidth: 1, borderColor: C.border, flexDirection: "row", overflow: "hidden" }}>
+            <View
+              style={{
+                borderWidth: 1,
+                borderColor: C.border,
+                flexDirection: "row",
+                overflow: "hidden",
+              }}
+            >
               {[
-                ["AI CONFIDENCE",      `${ai.confidence ?? "-"}%`,          C.text],
-                ["PHISHING PROBABILITY", `${ai.phishingProbability ?? "-"}%`, ai.phishingProbability >= 60 ? C.danger : ai.phishingProbability >= 30 ? C.warn : C.green],
-                ["RISK SCORE",          `${riskScore} / 100`,                rColor],
+                ["AI CONFIDENCE", `${ai.confidence ?? "-"}%`, C.text],
+                [
+                  "PHISHING PROBABILITY",
+                  `${ai.phishingProbability ?? "-"}%`,
+                  ai.phishingProbability >= 60
+                    ? C.danger
+                    : ai.phishingProbability >= 30
+                      ? C.warn
+                      : C.green,
+                ],
+                ["RISK SCORE", `${riskScore} / 100`, rColor],
               ].map(([label, value, color], i) => (
-                <View key={label as string} style={{
-                  flex: 1,
-                  padding: 14,
-                  borderLeftWidth: i > 0 ? 1 : 0,
-                  borderLeftColor: C.border,
-                  backgroundColor: i % 2 === 0 ? C.card : C.bgAlt,
-                  alignItems: "center",
-                }}>
-                  <Text style={{ fontFamily: "DM Mono", fontSize: 6.5, color: C.dimmer, letterSpacing: 1, marginBottom: 6 }}>{label as string}</Text>
-                  <Text style={{ fontFamily: "DM Mono", fontWeight: 500, fontSize: 18, color: color as string }}>{value as string}</Text>
+                <View
+                  key={label as string}
+                  style={{
+                    flex: 1,
+                    padding: 14,
+                    borderLeftWidth: i > 0 ? 1 : 0,
+                    borderLeftColor: C.border,
+                    backgroundColor: i % 2 === 0 ? C.card : C.bgAlt,
+                    alignItems: "center",
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontFamily: "DM Mono",
+                      fontSize: 6.5,
+                      color: C.dimmer,
+                      letterSpacing: 1,
+                      marginBottom: 6,
+                    }}
+                  >
+                    {label as string}
+                  </Text>
+                  <Text
+                    style={{
+                      fontFamily: "DM Mono",
+                      fontWeight: 500,
+                      fontSize: 18,
+                      color: color as string,
+                    }}
+                  >
+                    {value as string}
+                  </Text>
                 </View>
               ))}
             </View>
           )}
-
         </View>
 
         <Footer label="MailHawk · Forensic Report" />
       </Page>
-
     </Document>
   );
-}
+}
 
 export async function generatePdfReport(data: AnalysisResult): Promise<Buffer> {
-  const buf = await renderToBuffer(<MailHawkPDF data={data} /> as any);
+  const buf = await renderToBuffer((<MailHawkPDF data={data} />) as any);
   return Buffer.from(buf);
 }

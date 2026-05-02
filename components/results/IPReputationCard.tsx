@@ -9,12 +9,6 @@ const RISK_CONFIG = {
   MALICIOUS: { color: "#ff4444", bg: "#ff444410", border: "#ff444430" },
 };
 
-const FLAG_EMOJIS: Record<string, string> = {
-  US:"🇺🇸",DE:"🇩🇪",GB:"🇬🇧",FR:"🇫🇷",NL:"🇳🇱",RU:"🇷🇺",
-  CN:"🇨🇳",IN:"🇮🇳",PK:"🇵🇰",BR:"🇧🇷",JP:"🇯🇵",AU:"🇦🇺",
-  CA:"🇨🇦",SG:"🇸🇬",KR:"🇰🇷",TR:"🇹🇷",IT:"🇮🇹",ES:"🇪🇸",
-};
-
 export default function IPReputationCard({ ipResults }: Props) {
   if (ipResults.length === 0) {
     return (
@@ -39,7 +33,6 @@ export default function IPReputationCard({ ipResults }: Props) {
       <div className="space-y-3">
         {ipResults.map((ip) => {
           const rc = RISK_CONFIG[ip.riskLevel];
-          const flag = FLAG_EMOJIS[ip.countryCode] || "🌐";
 
           return (
             <div
@@ -76,7 +69,7 @@ export default function IPReputationCard({ ipResults }: Props) {
               <div className="grid grid-cols-2 gap-2 text-[10px] font-mono">
                 <div className="flex items-center gap-1.5">
                   <Globe className="w-3 h-3 text-hawk-muted" />
-                  <span className="text-hawk-muted">{flag} {ip.city}, {ip.country}</span>
+                  <span className="text-hawk-muted">{ip.city}, {ip.country}</span>
                 </div>
                 <div className="flex items-center gap-1.5">
                   <Shield className="w-3 h-3 text-hawk-muted" />
@@ -89,8 +82,8 @@ export default function IPReputationCard({ ipResults }: Props) {
 
               
               <div className="flex flex-wrap gap-1.5 mt-2">
-                {ip.isTor && <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-[#ff444420] text-hawk-danger border border-[#ff444430]">⚠ TOR</span>}
-                {ip.isProxy && <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-[#ffaa0020] text-hawk-warning border border-[#ffaa0030]">⚠ PROXY</span>}
+                {ip.isTor && <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-[#ff444420] text-hawk-danger border border-[#ff444430]"><AlertTriangle className="w-2.5 h-2.5 inline mr-0.5" /> TOR</span>}
+                {ip.isProxy && <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-[#ffaa0020] text-hawk-warning border border-[#ffaa0030]"><AlertTriangle className="w-2.5 h-2.5 inline mr-0.5" /> PROXY</span>}
                 {ip.isHosting && <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-[#4488ff20] text-[#4488ff] border border-[#4488ff30]">HOSTING</span>}
                 {ip.totalReports > 0 && (
                   <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-[#ff444420] text-hawk-danger border border-[#ff444430]">

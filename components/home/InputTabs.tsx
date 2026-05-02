@@ -3,6 +3,7 @@
 import { useState } from "react";
 import HeaderInput from "@/components/home/HeaderInput";
 import FileUpload from "@/components/home/FileUpload";
+import { Keyboard, Folder } from "lucide-react";
 
 export default function InputTabs() {
   const [active, setActive] = useState<"upload" | "paste">("upload");
@@ -10,7 +11,6 @@ export default function InputTabs() {
 
   return (
     <div className="w-full max-w-175 mx-auto">
-      
       <div className="flex gap-2 justify-center mb-4">
         {(["upload", "paste"] as const).map((tab) => (
           <button
@@ -22,17 +22,20 @@ export default function InputTabs() {
                 : "border-b-hawk-border bg-hawk-card text-hawk-muted"
             }`}
           >
-            {tab === "paste" ? "⌨ Paste Header" : "📁 Upload File"}
+            {tab === "paste" ? (
+              <span className="flex items-center gap-2"><Keyboard className="w-4 h-4" /> Paste Header</span>
+            ) : (
+              <span className="flex items-center gap-2"><Folder className="w-4 h-4" /> Upload File</span>
+            )}
           </button>
         ))}
       </div>
 
-      
       <div className="bg-hawk-card border border-hawk-border rounded-none p-5">
         {active === "paste" ? (
           <>
             <div className="mb-4 font-mono text-[0.65rem] text-hawk-muted bg-hawk-green/5 py-[0.6rem] px-[0.8rem] border border-hawk-border flex items-center gap-2">
-              <span className="text-hawk-green font-bold">▸ GMAIL INSTRUCTIONS:</span> 
+              <span className="text-hawk-green font-bold">▸ GMAIL INSTRUCTIONS:</span>
               <span>Open email &gt; Click <strong>⋮ (More)</strong> &gt; <strong>Show original</strong> &gt; <strong>Copy to clipboard</strong></span>
             </div>
             <HeaderInput value={header} onChange={setHeader} />
@@ -40,7 +43,7 @@ export default function InputTabs() {
         ) : (
           <>
             <div className="mb-4 font-mono text-[0.65rem] text-hawk-muted bg-hawk-green/5 py-[0.6rem] px-[0.8rem] border border-hawk-border flex items-center gap-2">
-              <span className="text-hawk-green font-bold">▸ GMAIL INSTRUCTIONS:</span> 
+              <span className="text-hawk-green font-bold">▸ GMAIL INSTRUCTIONS:</span>
               <span>Open email &gt; Click <strong>⋮ (More)</strong> &gt; <strong>Download message</strong> (.eml)</span>
             </div>
             <FileUpload

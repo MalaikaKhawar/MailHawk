@@ -2,7 +2,7 @@
 
 import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { Loader2, Zap } from "lucide-react";
+import { Loader2, Zap, X } from "lucide-react";
 import LoadingTerminal from "@/components/home/LoadingTerminal";
 
 const PLACEHOLDER = `Received: from mail.example.com (mail.example.com [192.0.2.1])
@@ -88,7 +88,7 @@ export default function HeaderInput({ value, onChange }: Props) {
           
           {error && (
             <p className="text-sm text-[#ff4444] font-mono flex items-center gap-1.5">
-              <span>✗</span> {error}
+              <X className="w-4 h-4" /> {error}
             </p>
           )}
 

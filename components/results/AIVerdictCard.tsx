@@ -4,7 +4,7 @@ import { useState } from "react";
 import type { AIVerdict } from "@/types";
 import {
   ChevronDown, ChevronUp, AlertTriangle, CheckCircle,
-  ShieldAlert, Brain, Wrench
+  ShieldAlert, Brain, Wrench, Check
 } from "lucide-react";
 
 interface Props { verdict: AIVerdict }
@@ -97,7 +97,7 @@ export default function AIVerdictCard({ verdict }: Props) {
             <div className="space-y-2">
               {verdict.trustIndicators.map((ti, i) => (
                 <div key={i} className="flex items-start gap-2 p-2.5 rounded-none bg-[#00ff8808] border border-[#00ff8820]">
-                  <span className="text-hawk-green mt-0.5 shrink-0 text-sm">✓</span>
+                  <Check className="w-3.5 h-3.5 text-hawk-green mt-0.5 shrink-0" />
                   <p className="text-xs text-hawk-muted">{ti}</p>
                 </div>
               ))}

@@ -85,7 +85,7 @@ export default function LinkAnalysisCard({ links }: Props) {
                   title="Open URL (caution)"
                   onClick={(e) => {
                     if (link.riskLevel === "DANGEROUS") {
-                      if (!confirm("⚠️ This URL is flagged as DANGEROUS. Are you sure you want to open it?")) {
+                      if (!confirm("WARNING: This URL is flagged as DANGEROUS. Are you sure you want to open it?")) {
                         e.preventDefault();
                       }
                     }

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronDown, ChevronUp, Info } from "lucide-react";
+import { ChevronDown, ChevronUp, Info, Check, X } from "lucide-react";
 import type { DnsResults } from "@/types";
 
 interface Props {
@@ -73,7 +73,7 @@ export default function DMARCCard({ dmarc, fromResult }: Props) {
           ["DKIM Alignment", dmarc.alignment.dkim],
           ["SPF Alignment", dmarc.alignment.spf],
           ["Coverage", `${dmarc.percentage}% of mail`],
-          ["Reporting", dmarc.reportingConfigured ? "✓ Configured" : "✗ Not configured"],
+          ["Reporting", dmarc.reportingConfigured ? <span key="r" className="flex items-center gap-1"><Check className="w-3 h-3 text-hawk-green" /> Configured</span> : <span key="r" className="flex items-center gap-1"><X className="w-3 h-3 text-[#ff4444]" /> Not configured</span>],
         ].map(([k, v]) => (
           <div key={k as string} className="bg-hawk-bg rounded-none p-2.5 border border-(--hawk-border)">
             <p className="text-[9px] font-mono text-hawk-muted uppercase tracking-widest mb-1">{k as string}</p>
