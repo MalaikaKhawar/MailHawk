@@ -1,7 +1,9 @@
+import { Settings, Shield, Bot } from "lucide-react";
+
 const BADGES = [
-  { icon: "⚙️", label: "Header Forensics", sub: "Full relay mapping" },
-  { icon: "🛡️", label: "Spoof Detection", sub: "13+ checks · realtime" },
-  { icon: "🤖", label: "AI Analysis", sub: "GPT-powered verdict" },
+  { icon: <Settings className="w-5 h-5 text-hawk-green" />, label: "Header Forensics", sub: "Full relay mapping" },
+  { icon: <Shield className="w-5 h-5 text-hawk-green" />, label: "Spoof Detection", sub: "13+ checks - realtime" },
+  { icon: <Bot className="w-5 h-5 text-hawk-green" />, label: "AI Analysis", sub: "GPT-powered verdict" },
 ];
 
 export default function FeatureBadges() {

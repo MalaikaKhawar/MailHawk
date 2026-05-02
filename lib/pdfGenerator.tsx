@@ -597,7 +597,7 @@ function Footer({ label }: { label: string }) {
   return (
     <View style={S.footer} fixed>
       <Text style={S.footerLeft}>
-        {label} · Developed with ❤️ by Malaika Yasmeen Khawar
+        {label} · Developed with love by Malaika Yasmeen Khawar
       </Text>
       <Text
         style={S.footerRight}

@@ -1,4 +1,5 @@
 import type { RelayHop, IPResult } from "@/types";
+import { Globe } from "lucide-react";
 
 interface Props {
   hops: RelayHop[];
@@ -19,11 +20,7 @@ function getHopColor(hop: RelayHop, ip?: IPResult): string {
   return "var(--color-hawk-green)";
 }
 
-const FLAG_EMOJIS: Record<string, string> = {
-  US: "🇺🇸", DE: "🇩🇪", GB: "🇬🇧", FR: "🇫🇷", NL: "🇳🇱", RU: "🇷🇺",
-  CN: "🇨🇳", IN: "🇮🇳", PK: "🇵🇰", BR: "🇧🇷", JP: "🇯🇵", AU: "🇦🇺",
-  CA: "🇨🇦", SG: "🇸🇬", KR: "🇰🇷", TR: "🇹🇷", IT: "🇮🇹", ES: "🇪🇸",
-};
+
 
 export default function RelayTimeline({ hops, ipResults }: Props) {
   if (hops.length === 0) {
@@ -52,7 +49,6 @@ export default function RelayTimeline({ hops, ipResults }: Props) {
           const color = getHopColor(hop, ip);
           const isLast = index === hops.length - 1;
           const isAnomaly = (ip?.riskLevel === "MALICIOUS" || ip?.riskLevel === "SUSPICIOUS" || hop.delaySeconds > 3600);
-          const flag = ip?.countryCode ? FLAG_EMOJIS[ip.countryCode] || "🌐" : "";
 
           return (
             <div key={hop.hopNumber} className="flex gap-4">
@@ -93,8 +89,11 @@ export default function RelayTimeline({ hops, ipResults }: Props) {
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-1.5 mb-0.5">
                       <span className="text-[9px] font-mono text-hawk-muted/80 uppercase tracking-wider">From</span>
-                      {hop.isPrivateIp && (
-                        <span className="text-[9px] font-mono text-hawk-muted bg-hawk-card px-1.5 py-0.5 rounded">private</span>
+                      {ip && (
+                        <span className="text-[10px] font-mono text-hawk-muted border border-hawk-border px-1.5 py-0.5 rounded bg-hawk-bg">
+                          <Globe className="w-3 h-3 inline mr-1" />
+                          {ip.countryCode || "Unknown"}
+                        </span>
                       )}
                     </div>
                     <p className="text-xs font-mono text-hawk-text truncate">{hop.from || "-"}</p>
